@@ -1,0 +1,145 @@
+.hero {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 2rem;
+  align-items: center;
+  padding: 3rem 6vw;
+}
+
+.logo {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #fff;
+}
+
+.selo {
+  color: #4a6741;
+  font-weight: 700;
+  margin: 1rem 0 0.5rem;
+}
+
+h1 {
+  font-size: clamp(2rem, 4vw, 3.4rem);
+  color: #3d5340;
+  line-height: 1.1;
+}
+
+h1 em {
+  font-style: normal;
+  color: #4a6741;
+}
+
+.faixa {
+  margin: 1rem 0 1.5rem;
+  background: #4a6741;
+  color: #fff;
+  padding: 0.9rem 1.1rem;
+  border-radius: 12px;
+  max-width: 36rem;
+}
+
+.ctas {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.hero-foto {
+  width: 100%;
+  border-radius: 28px;
+  object-fit: cover;
+  min-height: 320px;
+}
+
+.bloco {
+  padding: 3rem 6vw;
+  text-align: center;
+}
+
+.bloco.sage {
+  background: #c1c9b7;
+}
+
+.grade {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0 2rem;
+  text-align: left;
+}
+
+.cartao {
+  background: #fff;
+  border-radius: 18px;
+  padding: 1.2rem;
+  box-shadow: 0 8px 24px rgb(74 103 65 / 8%);
+}
+
+.pata {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  background: #e5a9b4;
+  border-radius: 50%;
+  margin-bottom: 0.5rem;
+}
+
+.duas-colunas {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: center;
+  text-align: left;
+}
+
+.duas-colunas img {
+  width: 100%;
+  border-radius: 24px;
+}
+
+.lista-pata {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0 0;
+}
+
+.lista-pata li {
+  padding-left: 1.4rem;
+  position: relative;
+  margin: 0.45rem 0;
+  font-weight: 600;
+  color: #2f432c;
+}
+
+.lista-pata li::before {
+  content: '';
+  width: 10px;
+  height: 10px;
+  background: #e5a9b4;
+  border-radius: 50%;
+  position: absolute;
+  left: 0;
+  top: 0.45rem;
+}
+
+.chamada {
+  background: #4a6741;
+  color: #fff;
+  text-align: center;
+  padding: 3rem 1rem;
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.chamada .botao {
+  margin-top: 1rem;
+}
+
+@media (max-width: 900px) {
+  .hero,
+  .duas-colunas {
+    grid-template-columns: 1fr;
+  }
+}

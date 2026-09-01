@@ -1,0 +1,163 @@
+@use '@angular/material' as mat;
+
+html {
+  @include mat.theme((
+    color: (
+      primary: mat.$green-palette,
+      tertiary: mat.$rose-palette,
+      theme-type: light,
+    ),
+    typography: (
+      plain-family: Nunito,
+      brand-family: Nunito,
+    ),
+    density: 0,
+  ));
+}
+
+:root {
+  --verde: #4a6741;
+  --sage: #c1c9b7;
+  --rosa: #e5a9b4;
+  --creme: #f7f4ee;
+  --texto: #2f432c;
+  --mat-sys-primary: #4a6741;
+  --mat-sys-on-primary: #ffffff;
+  --mat-sys-surface: #f7f4ee;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--creme);
+  color: var(--texto);
+  font-family: Nunito, 'Segoe UI', sans-serif;
+}
+
+body {
+  background-image:
+    radial-gradient(circle at 12px 12px, rgb(74 103 65 / 6%) 2px, transparent 3px);
+  background-size: 64px 64px;
+}
+
+a {
+  color: var(--verde);
+  text-decoration: none;
+}
+
+h1,
+h2,
+h3 {
+  color: var(--verde);
+}
+
+.botao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 999px;
+  padding: 0.7rem 1.2rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.botao.principal {
+  background: var(--verde);
+  color: #fff;
+}
+
+.botao.rosa {
+  background: var(--rosa);
+  color: #3d5340;
+}
+
+.botao.fantasma,
+.botao.fantasma-claro {
+  background: transparent;
+  color: var(--verde);
+  border: 1px solid var(--verde);
+}
+
+.botao.fantasma-claro {
+  color: #fff;
+  border-color: #fff;
+}
+
+.botao.texto {
+  background: transparent;
+  color: var(--verde);
+}
+
+.botao:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.formulario-box {
+  max-width: 480px;
+  margin: 2.5rem auto;
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgb(74 103 65 / 10%);
+}
+
+.formulario-box.largo {
+  max-width: 720px;
+}
+
+.formulario-box form,
+.formulario-box label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.formulario-box label {
+  margin-bottom: 0.7rem;
+  font-weight: 600;
+}
+
+.formulario-box input,
+.formulario-box select,
+.formulario-box textarea {
+  border: 1px solid #c1c9b7;
+  border-radius: 10px;
+  padding: 0.65rem 0.75rem;
+  font: inherit;
+}
+
+.formulario-box .check {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.erros {
+  color: #9b2c2c;
+  padding-left: 1.1rem;
+}
+
+.ok {
+  color: var(--verde);
+  font-weight: 700;
+}
+
+.cartao {
+  background: #fff;
+  border-radius: 18px;
+  padding: 1.2rem;
+}
+
+.ctas {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}

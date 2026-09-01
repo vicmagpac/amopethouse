@@ -1,0 +1,25 @@
+.rodape {
+  background: #4a6741;
+  color: #f7f4ee;
+  text-align: center;
+  padding: 2.5rem 1rem 2rem;
+}
+
+.rodape img {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #fff;
+  margin-bottom: 0.75rem;
+}
+
+.rodape a {
+  color: #e5a9b4;
+}
+
+.rodape small {
+  display: block;
+  margin-top: 0.75rem;
+  color: #c1c9b7;
+}

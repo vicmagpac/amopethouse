@@ -1,0 +1,70 @@
+<section class="formulario-box largo">
+  <h1>{{ id() ? 'Editar animal' : 'Novo animal' }}</h1>
+  @if (erros().length) {
+    <ul class="erros">@for (erro of erros(); track erro) { <li>{{ erro }}</li> }</ul>
+  }
+
+  @if (animal()?.foto_url) {
+    <img class="preview" [src]="animal()?.foto_url" [alt]="animal()?.nome" />
+  }
+
+  <form [formGroup]="formulario" (ngSubmit)="salvar()">
+    <label>Nome <input formControlName="nome" /></label>
+    <label>Espécie
+      <select formControlName="especie">
+        <option value="cao">Cão</option>
+        <option value="gato">Gato</option>
+      </select>
+    </label>
+    <label>Raça <input formControlName="raca" /></label>
+    <label>Porte
+      <select formControlName="porte">
+        <option value="pequeno">Pequeno</option>
+        <option value="medio">Médio</option>
+        <option value="grande">Grande</option>
+      </select>
+    </label>
+    <label>Sexo
+      <select formControlName="sexo">
+        <option value="macho">Macho</option>
+        <option value="femea">Fêmea</option>
+      </select>
+    </label>
+    <label>Nascimento <input type="date" formControlName="data_nascimento" /></label>
+    <label>Peso (kg) <input type="number" step="0.1" formControlName="peso" /></label>
+    <label class="check"><input type="checkbox" formControlName="castrado" /> Castrado</label>
+    <label>Temperamento <input formControlName="temperamento" /></label>
+    <label>Observações (alimentação, medicação, alergias)
+      <textarea formControlName="observacoes" rows="4"></textarea>
+    </label>
+    <label>Foto <input type="file" accept="image/*" (change)="aoSelecionarFoto($event)" /></label>
+    <div class="ctas">
+      <button class="botao principal" type="submit" [disabled]="formulario.invalid || enviando()">Salvar</button>
+      <a class="botao fantasma" routerLink="/conta/animais">Cancelar</a>
+      @if (id()) {
+        <button class="botao texto" type="button" (click)="excluir()">Excluir</button>
+      }
+    </div>
+  </form>
+
+  @if (id()) {
+    <div class="vacinas">
+      <h2>Vacinas</h2>
+      <ul>
+        @for (vacina of vacinas(); track vacina.id) {
+          <li>
+            {{ vacina.nome }} — {{ vacina.aplicada_em }}
+            @if (vacina.expira_em) { (válida até {{ vacina.expira_em }}) }
+            <button type="button" class="botao texto" (click)="excluirVacina(vacina)">Remover</button>
+          </li>
+        }
+      </ul>
+      <form [formGroup]="vacinaForm" (ngSubmit)="adicionarVacina()">
+        <label>Vacina <input formControlName="nome" placeholder="Antirrábica" /></label>
+        <label>Aplicada em <input type="date" formControlName="aplicada_em" /></label>
+        <label>Validade <input type="date" formControlName="expira_em" /></label>
+        <button class="botao principal" type="submit" [disabled]="vacinaForm.invalid">Adicionar vacina</button>
+      </form>
+    </div>
+  }
+</section>

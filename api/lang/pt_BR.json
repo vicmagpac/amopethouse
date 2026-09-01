@@ -1,0 +1,9 @@
+{
+    "accepted": "É preciso aceitar :attribute.",
+    "confirmed": "A confirmação de :attribute não confere.",
+    "email": "Informe um :attribute válido.",
+    "required": "O campo :attribute é obrigatório.",
+    "unique": "Este :attribute já está em uso.",
+    "The given data was invalid.": "Os dados informados são inválidos.",
+    "As credenciais informadas estão incorretas.": "As credenciais informadas estão incorretas."
+}

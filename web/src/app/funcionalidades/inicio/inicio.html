@@ -1,0 +1,46 @@
+<section class="hero">
+  <div class="hero-texto">
+    <img src="/brand/logo.jpg" alt="Amo Pet House" class="logo" />
+    <p class="selo">Papicu — Fortaleza</p>
+    <h1>Vai viajar ou <em>passa o dia fora</em>?</h1>
+    <p class="faixa">Cuidado, segurança e afeto para o seu pet. Tranquilidade para você.</p>
+    <div class="ctas">
+      <a class="botao principal" routerLink="/cadastrar">Agendar cuidado</a>
+      <a class="botao fantasma-claro" [href]="whatsapp" target="_blank" rel="noopener">Falar no WhatsApp</a>
+    </div>
+  </div>
+  <img class="hero-foto" src="/brand/banner-daycare.jpg" alt="Cuidadora com cães no jardim da Amo Pet House" />
+</section>
+
+<section class="bloco">
+  <h2>Apoio de confiança para a sua rotina com o seu pet</h2>
+  <div class="grade">
+    @for (item of servicos; track item.titulo) {
+      <article class="cartao">
+        <span class="pata"></span>
+        <h3>{{ item.titulo }}</h3>
+        <p>{{ item.texto }}</p>
+      </article>
+    }
+  </div>
+  <a class="botao principal" routerLink="/servicos">Ver todos os serviços</a>
+</section>
+
+<section class="bloco sage">
+  <div class="duas-colunas">
+    <div>
+      <h2>Por que a Amo Pet House?</h2>
+      <ul class="lista-pata">
+        @for (item of diferenciais; track item) {
+          <li>{{ item }}</li>
+        }
+      </ul>
+    </div>
+    <img src="/brand/banner-services.jpg" alt="Momentos com os pets da Amo Pet House" />
+  </div>
+</section>
+
+<section class="chamada">
+  <p>Confiança para você. Bem-estar para seu pet.</p>
+  <a class="botao rosa" routerLink="/cadastrar">Criar minha conta</a>
+</section>
