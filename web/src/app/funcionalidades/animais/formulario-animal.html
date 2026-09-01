@@ -1,70 +1,158 @@
-<section class="formulario-box largo">
-  <h1>{{ id() ? 'Editar animal' : 'Novo animal' }}</h1>
-  @if (erros().length) {
-    <ul class="erros">@for (erro of erros(); track erro) { <li>{{ erro }}</li> }</ul>
-  }
+<mat-card appearance="outlined" class="painel-conta">
+  <mat-card-header>
+    <mat-card-title>{{ id() ? 'Editar animal' : 'Novo animal' }}</mat-card-title>
+    <mat-card-subtitle>
+      {{ id() ? 'Atualize os dados, a foto e as vacinas.' : 'Informe espécie, raça e temperamento do pet.' }}
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    @if (erros().length) {
+      <ul class="erros">@for (erro of erros(); track erro) { <li>{{ erro }}</li> }</ul>
+    }
 
-  @if (animal()?.foto_url) {
-    <img class="preview" [src]="animal()?.foto_url" [alt]="animal()?.nome" />
-  }
+    @if (animal()?.foto_url) {
+      <img class="preview" [src]="animal()?.foto_url" [alt]="animal()?.nome" />
+    }
 
-  <form [formGroup]="formulario" (ngSubmit)="salvar()">
-    <label>Nome <input formControlName="nome" /></label>
-    <label>Espécie
-      <select formControlName="especie">
-        <option value="cao">Cão</option>
-        <option value="gato">Gato</option>
-      </select>
-    </label>
-    <label>Raça <input formControlName="raca" /></label>
-    <label>Porte
-      <select formControlName="porte">
-        <option value="pequeno">Pequeno</option>
-        <option value="medio">Médio</option>
-        <option value="grande">Grande</option>
-      </select>
-    </label>
-    <label>Sexo
-      <select formControlName="sexo">
-        <option value="macho">Macho</option>
-        <option value="femea">Fêmea</option>
-      </select>
-    </label>
-    <label>Nascimento <input type="date" formControlName="data_nascimento" /></label>
-    <label>Peso (kg) <input type="number" step="0.1" formControlName="peso" /></label>
-    <label class="check"><input type="checkbox" formControlName="castrado" /> Castrado</label>
-    <label>Temperamento <input formControlName="temperamento" /></label>
-    <label>Observações (alimentação, medicação, alergias)
-      <textarea formControlName="observacoes" rows="4"></textarea>
-    </label>
-    <label>Foto <input type="file" accept="image/*" (change)="aoSelecionarFoto($event)" /></label>
-    <div class="ctas">
-      <button class="botao principal" type="submit" [disabled]="formulario.invalid || enviando()">Salvar</button>
-      <a class="botao fantasma" routerLink="/conta/animais">Cancelar</a>
-      @if (id()) {
-        <button class="botao texto" type="button" (click)="excluir()">Excluir</button>
-      }
-    </div>
-  </form>
+    <form class="conta-form grade" [formGroup]="formulario" (ngSubmit)="salvar()">
+      <mat-form-field appearance="outline">
+        <mat-label>Nome</mat-label>
+        <input matInput formControlName="nome" />
+      </mat-form-field>
 
-  @if (id()) {
-    <div class="vacinas">
-      <h2>Vacinas</h2>
-      <ul>
-        @for (vacina of vacinas(); track vacina.id) {
-          <li>
-            {{ vacina.nome }} — {{ vacina.aplicada_em }}
-            @if (vacina.expira_em) { (válida até {{ vacina.expira_em }}) }
-            <button type="button" class="botao texto" (click)="excluirVacina(vacina)">Remover</button>
-          </li>
+      <mat-form-field appearance="outline">
+        <mat-label>Espécie</mat-label>
+        <mat-select formControlName="especie">
+          <mat-option value="cao">Cão</mat-option>
+          <mat-option value="gato">Gato</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Raça</mat-label>
+        <mat-select formControlName="raca">
+          <mat-option value="">Selecione</mat-option>
+          @for (raca of racas(); track raca) {
+            <mat-option [value]="raca">{{ raca }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Porte</mat-label>
+        <mat-select formControlName="porte">
+          <mat-option value="pequeno">Pequeno</mat-option>
+          <mat-option value="medio">Médio</mat-option>
+          <mat-option value="grande">Grande</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Sexo</mat-label>
+        <mat-select formControlName="sexo">
+          <mat-option value="macho">Macho</mat-option>
+          <mat-option value="femea">Fêmea</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Nascimento</mat-label>
+        <input matInput type="date" formControlName="data_nascimento" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Peso (kg)</mat-label>
+        <input matInput type="number" step="0.1" formControlName="peso" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Temperamento</mat-label>
+        <mat-select formControlName="temperamento">
+          <mat-option value="">Selecione</mat-option>
+          @for (item of temperamentos; track item) {
+            <mat-option [value]="item">{{ item }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <div class="check">
+        <mat-checkbox formControlName="castrado">Castrado</mat-checkbox>
+      </div>
+
+      <mat-form-field appearance="outline" class="largo">
+        <mat-label>Observações (alimentação, medicação, alergias)</mat-label>
+        <textarea matInput formControlName="observacoes" rows="4"></textarea>
+      </mat-form-field>
+
+      <div class="foto-campo largo">
+        <label class="rotulo-foto" for="foto-animal">Foto</label>
+        <input id="foto-animal" type="file" accept="image/*" (change)="aoSelecionarFoto($event)" />
+      </div>
+
+      <div class="acoes largo">
+        <button matButton="filled" type="submit" [disabled]="formulario.invalid || enviando()">
+          <mat-icon>save</mat-icon>
+          Salvar
+        </button>
+        <a matButton="outlined" routerLink="/conta/animais">Cancelar</a>
+        @if (id()) {
+          <button matButton="text" type="button" (click)="excluir()">
+            <mat-icon>delete</mat-icon>
+            Excluir
+          </button>
         }
-      </ul>
-      <form [formGroup]="vacinaForm" (ngSubmit)="adicionarVacina()">
-        <label>Vacina <input formControlName="nome" placeholder="Antirrábica" /></label>
-        <label>Aplicada em <input type="date" formControlName="aplicada_em" /></label>
-        <label>Validade <input type="date" formControlName="expira_em" /></label>
-        <button class="botao principal" type="submit" [disabled]="vacinaForm.invalid">Adicionar vacina</button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>
+
+@if (id()) {
+  <mat-card appearance="outlined" class="painel-conta vacinas">
+    <mat-card-header>
+      <mat-card-title>Vacinas</mat-card-title>
+      <mat-card-subtitle>Mantenha a carteira em dia para a estadia.</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      @if (vacinas().length === 0) {
+        <p class="vazio">Nenhuma vacina registrada ainda.</p>
+      } @else {
+        <mat-list>
+          @for (vacina of vacinas(); track vacina.id) {
+            <mat-list-item>
+              <mat-icon matListItemIcon>vaccines</mat-icon>
+              <span matListItemTitle>{{ vacina.nome }}</span>
+              <span matListItemLine>
+                Aplicada em {{ vacina.aplicada_em }}
+                @if (vacina.expira_em) { · válida até {{ vacina.expira_em }} }
+              </span>
+              <button matIconButton matListItemMeta type="button" (click)="excluirVacina(vacina)" aria-label="Remover vacina">
+                <mat-icon>close</mat-icon>
+              </button>
+            </mat-list-item>
+          }
+        </mat-list>
+      }
+
+      <form class="conta-form grade vacina-form" [formGroup]="vacinaForm" (ngSubmit)="adicionarVacina()">
+        <mat-form-field appearance="outline">
+          <mat-label>Vacina</mat-label>
+          <input matInput formControlName="nome" placeholder="Antirrábica" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Aplicada em</mat-label>
+          <input matInput type="date" formControlName="aplicada_em" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Validade</mat-label>
+          <input matInput type="date" formControlName="expira_em" />
+        </mat-form-field>
+        <div class="acoes">
+          <button matButton="filled" type="submit" [disabled]="vacinaForm.invalid">
+            <mat-icon>add</mat-icon>
+            Adicionar vacina
+          </button>
+        </div>
       </form>
-    </div>
-  }
-</section>
+    </mat-card-content>
+  </mat-card>
+}

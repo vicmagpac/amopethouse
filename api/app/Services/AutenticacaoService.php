@@ -23,7 +23,7 @@ class AutenticacaoService
         $usuario = Usuario::query()->create([
             'nome' => $dados['nome'],
             'email' => $dados['email'],
-            'telefone' => $dados['telefone'] ?? null,
+            'telefone' => $this->somenteDigitos($dados['telefone'] ?? null),
             'cpf' => $this->somenteDigitos($dados['cpf'] ?? null),
             'papel' => PapelUsuario::Tutor,
             'senha' => $dados['senha'],
@@ -80,7 +80,7 @@ class AutenticacaoService
     {
         $usuario->fill([
             'nome' => $dados['nome'] ?? $usuario->nome,
-            'telefone' => $dados['telefone'] ?? $usuario->telefone,
+            'telefone' => $this->somenteDigitos($dados['telefone'] ?? $usuario->telefone),
             'rua' => $dados['rua'] ?? $usuario->rua,
             'numero' => $dados['numero'] ?? $usuario->numero,
             'complemento' => $dados['complemento'] ?? $usuario->complemento,

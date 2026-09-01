@@ -1,0 +1,48 @@
+.abertura,
+.fechamento {
+  font-size: 1.05rem;
+  line-height: 1.55;
+}
+
+.cartao {
+  background: #fff;
+  border-radius: 18px;
+  padding: 1.35rem 1.4rem 1.2rem;
+  margin: 1.4rem 0;
+  box-shadow: 0 10px 30px rgb(74 103 65 / 8%);
+}
+
+.cartao h2 {
+  margin: 0 0 0.4rem;
+}
+
+.resumo {
+  color: var(--verde);
+  font-weight: 700;
+  margin: 0 0 0.85rem;
+}
+
+.cartao p,
+.cartao li {
+  line-height: 1.55;
+}
+
+.cartao ul {
+  margin: 0.4rem 0 0;
+  padding-left: 1.15rem;
+}
+
+.cartao li {
+  margin-bottom: 0.35rem;
+}
+
+.cartao a {
+  font-weight: 700;
+}
+
+.ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}

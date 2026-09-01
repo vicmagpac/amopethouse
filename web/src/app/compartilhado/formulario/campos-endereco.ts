@@ -1,19 +1,23 @@
-import { Component, DestroyRef, OnInit, inject, input, signal } from '@angular/core';
+import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { distinctUntilChanged, filter, finalize, map, switchMap } from 'rxjs';
+import { ControlContainer, FormGroupDirective, ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { debounceTime, distinctUntilChanged, filter, finalize, map, switchMap } from 'rxjs';
 import { CepService } from '../../nucleo/servicos/cep.service';
 import { Mascara } from '../diretivas/mascara';
 import { somenteDigitos } from '../util/mascara';
 
 @Component({
   selector: 'app-campos-endereco',
-  imports: [ReactiveFormsModule, Mascara],
+  imports: [ReactiveFormsModule, Mascara, MatFormFieldModule, MatInputModule],
+  viewProviders: [{ provide: ControlContainer, useExisting: FormGroupDirective }],
   template: `
-    <div class="endereco" [formGroup]="grupo()">
-      <label>
-        CEP
+    <div class="endereco">
+      <mat-form-field appearance="outline" class="largo">
+        <mat-label>CEP</mat-label>
         <input
+          matInput
           formControlName="cep"
           mascara="cep"
           placeholder="00000-000"
@@ -21,48 +25,74 @@ import { somenteDigitos } from '../util/mascara';
           autocomplete="postal-code"
           maxlength="9"
         />
-      </label>
-      @if (buscandoCep()) {
-        <p class="ajuda">Buscando endereço...</p>
-      }
+        @if (buscandoCep()) {
+          <mat-hint>Buscando endereço...</mat-hint>
+        } @else {
+          <mat-hint>Preencha rua, bairro, cidade e estado</mat-hint>
+        }
+      </mat-form-field>
       @if (erroCep()) {
-        <p class="aviso">{{ erroCep() }}</p>
+        <p class="aviso-cep">{{ erroCep() }}</p>
       }
-      <p class="ajuda">Digite o CEP para preencher rua, bairro, cidade e estado. Depois complete o número.</p>
-      <label>Rua <input formControlName="rua" autocomplete="address-line1" /></label>
-      <div class="linha">
-        <label>Número <input formControlName="numero" autocomplete="address-line2" /></label>
-        <label>Complemento <input formControlName="complemento" /></label>
-      </div>
-      <label>Bairro <input formControlName="bairro" /></label>
-      <div class="linha">
-        <label>Cidade <input formControlName="cidade" autocomplete="address-level2" /></label>
-        <label>Estado <input formControlName="estado" maxlength="2" autocomplete="address-level1" /></label>
-      </div>
+
+      <mat-form-field appearance="outline" class="largo">
+        <mat-label>Rua</mat-label>
+        <input matInput formControlName="rua" autocomplete="address-line1" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Número</mat-label>
+        <input matInput formControlName="numero" autocomplete="address-line2" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Complemento</mat-label>
+        <input matInput formControlName="complemento" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="largo">
+        <mat-label>Bairro</mat-label>
+        <input matInput formControlName="bairro" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Cidade</mat-label>
+        <input matInput formControlName="cidade" autocomplete="address-level2" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Estado</mat-label>
+        <input matInput formControlName="estado" maxlength="2" autocomplete="address-level1" />
+      </mat-form-field>
     </div>
   `,
   styles: `
-    .linha {
+    .endereco {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 0.75rem;
+      gap: 0.25rem 1rem;
     }
-    .ajuda,
-    .aviso {
-      margin: -0.35rem 0 0.7rem;
-      font-size: 0.85rem;
-      font-weight: 500;
+    .largo {
+      grid-column: 1 / -1;
     }
-    .ajuda {
-      color: #5b6f55;
-    }
-    .aviso {
+    .aviso-cep {
+      grid-column: 1 / -1;
+      margin: -0.4rem 0 0.4rem;
       color: #9b2c2c;
+      font-size: 0.85rem;
+    }
+    @media (max-width: 640px) {
+      .endereco {
+        grid-template-columns: 1fr;
+      }
+      .largo {
+        grid-column: 1;
+      }
     }
   `,
 })
 export class CamposEndereco implements OnInit {
-  readonly grupo = input.required<FormGroup>();
+  private readonly formularioPai = inject(FormGroupDirective);
   private readonly cep = inject(CepService);
   private readonly destroyRef = inject(DestroyRef);
 
@@ -70,10 +100,11 @@ export class CamposEndereco implements OnInit {
   protected readonly erroCep = signal('');
 
   ngOnInit() {
-    this.grupo()
+    this.formularioPai.form
       .get('cep')
       ?.valueChanges.pipe(
         map((valor) => somenteDigitos(valor)),
+        debounceTime(250),
         distinctUntilChanged(),
         filter((digitos) => {
           if (digitos.length !== 8) {
@@ -95,12 +126,15 @@ export class CamposEndereco implements OnInit {
           return;
         }
 
-        this.grupo().patchValue({
-          rua: endereco.rua,
-          bairro: endereco.bairro,
-          cidade: endereco.cidade,
-          estado: endereco.estado,
-        });
+        this.formularioPai.form.patchValue(
+          {
+            rua: endereco.rua,
+            bairro: endereco.bairro,
+            cidade: endereco.cidade,
+            estado: endereco.estado,
+          },
+          { emitEvent: false },
+        );
       });
   }
 }

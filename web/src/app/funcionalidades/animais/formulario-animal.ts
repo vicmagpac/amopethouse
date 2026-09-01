@@ -1,17 +1,51 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIcon } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatListModule } from '@angular/material/list';
+import { MatSelectModule } from '@angular/material/select';
 import { AnimalService } from '../../nucleo/servicos/animal.service';
 import { Animal, RegistroVacina } from '../../nucleo/modelos';
+import { racasPorEspecie, TEMPERAMENTOS } from '../../nucleo/listas-animal';
 import { mensagensErro } from '../../compartilhado/util/mensagens-erro';
 
 @Component({
   selector: 'app-formulario-animal',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [
+    ReactiveFormsModule,
+    RouterLink,
+    MatButtonModule,
+    MatCardModule,
+    MatCheckboxModule,
+    MatFormFieldModule,
+    MatIcon,
+    MatInputModule,
+    MatListModule,
+    MatSelectModule,
+  ],
   templateUrl: './formulario-animal.html',
   styles: `
-    img.preview { width: 160px; height: 160px; object-fit: cover; border-radius: 16px; }
-    .vacinas { margin-top: 2rem; }
+    .painel-conta { max-width: 860px; }
+    mat-card-title { color: var(--verde); }
+    .preview { width: 160px; height: 160px; object-fit: cover; border-radius: 16px; margin: 0.75rem 0 0.25rem; }
+    .grade { display: grid; grid-template-columns: 1fr 1fr; gap: 0.25rem 1rem; margin-top: 0.75rem; }
+    .largo, .acoes { grid-column: 1 / -1; }
+    .check { display: flex; align-items: center; min-height: 56px; }
+    .foto-campo { display: flex; flex-direction: column; gap: 0.35rem; margin: 0.4rem 0 0.8rem; }
+    .rotulo-foto { font-weight: 600; color: var(--texto); }
+    .vacinas { margin-top: 1.25rem; }
+    .vazio { color: #5b6f55; }
+    .vacina-form { margin-top: 1rem; }
+    @media (max-width: 640px) {
+      .grade { grid-template-columns: 1fr; }
+      .largo, .acoes { grid-column: 1; }
+    }
   `,
 })
 export class FormularioAnimal implements OnInit {
@@ -26,10 +60,13 @@ export class FormularioAnimal implements OnInit {
   protected readonly animal = signal<Animal | null>(null);
   protected readonly vacinas = signal<RegistroVacina[]>([]);
   protected foto?: File;
+  protected readonly temperamentos = TEMPERAMENTOS;
+  private readonly especieAtual = signal<'cao' | 'gato'>('cao');
+  private readonly racaExtra = signal('');
 
   protected readonly formulario = this.fb.nonNullable.group({
     nome: ['', Validators.required],
-    especie: ['cao', Validators.required],
+    especie: ['cao' as 'cao' | 'gato', Validators.required],
     raca: [''],
     porte: ['pequeno', Validators.required],
     sexo: ['macho', Validators.required],
@@ -40,11 +77,31 @@ export class FormularioAnimal implements OnInit {
     observacoes: [''],
   });
 
+  protected readonly racas = computed(() => {
+    const lista = [...racasPorEspecie(this.especieAtual())];
+    const extra = this.racaExtra();
+    if (extra && !lista.includes(extra)) {
+      return [extra, ...lista];
+    }
+    return lista;
+  });
+
   protected readonly vacinaForm = this.fb.nonNullable.group({
     nome: ['', Validators.required],
     aplicada_em: ['', Validators.required],
     expira_em: [''],
   });
+
+  constructor() {
+    this.formulario.controls.especie.valueChanges.pipe(takeUntilDestroyed()).subscribe((especie) => {
+      this.especieAtual.set(especie);
+      const lista = racasPorEspecie(especie);
+      if (!lista.includes(this.formulario.controls.raca.value)) {
+        this.formulario.controls.raca.setValue('');
+        this.racaExtra.set('');
+      }
+    });
+  }
 
   ngOnInit() {
     const idParam = this.rota.snapshot.paramMap.get('id');
@@ -57,18 +114,23 @@ export class FormularioAnimal implements OnInit {
       next: (resposta) => {
         this.animal.set(resposta.data);
         this.vacinas.set(resposta.data.vacinas ?? []);
-        this.formulario.patchValue({
-          nome: resposta.data.nome,
-          especie: resposta.data.especie,
-          raca: resposta.data.raca ?? '',
-          porte: resposta.data.porte,
-          sexo: resposta.data.sexo,
-          data_nascimento: resposta.data.data_nascimento ?? '',
-          peso: String(resposta.data.peso ?? ''),
-          castrado: resposta.data.castrado,
-          temperamento: resposta.data.temperamento ?? '',
-          observacoes: resposta.data.observacoes ?? '',
-        });
+        this.especieAtual.set(resposta.data.especie);
+        this.racaExtra.set(resposta.data.raca ?? '');
+        this.formulario.patchValue(
+          {
+            nome: resposta.data.nome,
+            especie: resposta.data.especie,
+            raca: resposta.data.raca ?? '',
+            porte: resposta.data.porte,
+            sexo: resposta.data.sexo,
+            data_nascimento: resposta.data.data_nascimento ?? '',
+            peso: String(resposta.data.peso ?? ''),
+            castrado: resposta.data.castrado,
+            temperamento: resposta.data.temperamento ?? '',
+            observacoes: resposta.data.observacoes ?? '',
+          },
+          { emitEvent: false },
+        );
       },
       error: (erro) => this.erros.set(mensagensErro(erro)),
     });

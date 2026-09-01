@@ -19,7 +19,9 @@ Route::middleware('auth:sanctum')->group(function (): void {
     Route::put('/usuario', [AutenticacaoController::class, 'atualizarPerfil']);
     Route::post('/email/reenviar-verificacao', [AutenticacaoController::class, 'reenviarVerificacao']);
 
-    Route::apiResource('animais', AnimalController::class);
+    Route::apiResource('animais', AnimalController::class)->parameters([
+        'animais' => 'animal',
+    ]);
     Route::post('/animais/{animal}/foto', [AnimalController::class, 'enviarFoto']);
     Route::post('/animais/{animal}/vacinas', [RegistroVacinaController::class, 'store']);
     Route::delete('/animais/{animal}/vacinas/{vacina}', [RegistroVacinaController::class, 'destroy']);

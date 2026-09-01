@@ -1,25 +1,47 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AutenticacaoService } from '../../nucleo/servicos/autenticacao.service';
 import { mensagensErro } from '../../compartilhado/util/mensagens-erro';
 
 @Component({
   selector: 'app-recuperar-senha',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule],
   template: `
-    <section class="formulario-box">
-      <h1>Recuperar senha</h1>
-      @if (mensagem()) { <p class="ok">{{ mensagem() }}</p> }
-      @if (erros().length) {
-        <ul class="erros">@for (erro of erros(); track erro) { <li>{{ erro }}</li> }</ul>
-      }
-      <form [formGroup]="formulario" (ngSubmit)="enviar()">
-        <label>E-mail <input type="email" formControlName="email" /></label>
-        <button class="botao principal" type="submit" [disabled]="formulario.invalid || enviando()">Enviar link</button>
-      </form>
-      <p><a routerLink="/entrar">Voltar ao login</a></p>
-    </section>
+    <mat-card appearance="outlined" class="cartao-auth">
+      <mat-card-header>
+        <mat-card-title>Recuperar senha</mat-card-title>
+        <mat-card-subtitle>Enviamos o link para o e-mail cadastrado.</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        @if (mensagem()) {
+          <p class="ok">{{ mensagem() }}</p>
+        }
+        @if (erros().length) {
+          <ul class="erros">@for (erro of erros(); track erro) { <li>{{ erro }}</li> }</ul>
+        }
+        <form class="conta-form" [formGroup]="formulario" (ngSubmit)="enviar()">
+          <mat-form-field appearance="outline">
+            <mat-label>E-mail</mat-label>
+            <input matInput type="email" formControlName="email" autocomplete="email" />
+          </mat-form-field>
+          <button matButton="filled" type="submit" [disabled]="formulario.invalid || enviando()">
+            Enviar link
+          </button>
+        </form>
+        <p class="links"><a routerLink="/entrar">Voltar ao login</a></p>
+      </mat-card-content>
+    </mat-card>
+  `,
+  styles: `
+    .cartao-auth { max-width: 460px; margin: 2.5rem auto; }
+    mat-card-title { color: var(--verde); }
+    form { display: flex; flex-direction: column; gap: 0.25rem; margin-top: 0.5rem; }
+    .links { margin: 0.85rem 0 0; }
   `,
 })
 export class RecuperarSenha {
@@ -51,22 +73,46 @@ export class RecuperarSenha {
 
 @Component({
   selector: 'app-redefinir-senha',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule],
   template: `
-    <section class="formulario-box">
-      <h1>Nova senha</h1>
-      @if (mensagem()) { <p class="ok">{{ mensagem() }}</p> }
-      @if (erros().length) {
-        <ul class="erros">@for (erro of erros(); track erro) { <li>{{ erro }}</li> }</ul>
-      }
-      <form [formGroup]="formulario" (ngSubmit)="enviar()">
-        <label>E-mail <input type="email" formControlName="email" /></label>
-        <label>Nova senha <input type="password" formControlName="senha" /></label>
-        <label>Confirmar senha <input type="password" formControlName="senha_confirmation" /></label>
-        <button class="botao principal" type="submit" [disabled]="formulario.invalid || enviando()">Salvar senha</button>
-      </form>
-      <p><a routerLink="/entrar">Entrar</a></p>
-    </section>
+    <mat-card appearance="outlined" class="cartao-auth">
+      <mat-card-header>
+        <mat-card-title>Nova senha</mat-card-title>
+        <mat-card-subtitle>Defina uma senha com no mínimo 8 caracteres.</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        @if (mensagem()) {
+          <p class="ok">{{ mensagem() }}</p>
+        }
+        @if (erros().length) {
+          <ul class="erros">@for (erro of erros(); track erro) { <li>{{ erro }}</li> }</ul>
+        }
+        <form class="conta-form" [formGroup]="formulario" (ngSubmit)="enviar()">
+          <mat-form-field appearance="outline">
+            <mat-label>E-mail</mat-label>
+            <input matInput type="email" formControlName="email" autocomplete="email" />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Nova senha</mat-label>
+            <input matInput type="password" formControlName="senha" autocomplete="new-password" />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Confirmar senha</mat-label>
+            <input matInput type="password" formControlName="senha_confirmation" autocomplete="new-password" />
+          </mat-form-field>
+          <button matButton="filled" type="submit" [disabled]="formulario.invalid || enviando()">
+            Salvar senha
+          </button>
+        </form>
+        <p class="links"><a routerLink="/entrar">Entrar</a></p>
+      </mat-card-content>
+    </mat-card>
+  `,
+  styles: `
+    .cartao-auth { max-width: 460px; margin: 2.5rem auto; }
+    mat-card-title { color: var(--verde); }
+    form { display: flex; flex-direction: column; gap: 0.25rem; margin-top: 0.5rem; }
+    .links { margin: 0.85rem 0 0; }
   `,
 })
 export class RedefinirSenha {

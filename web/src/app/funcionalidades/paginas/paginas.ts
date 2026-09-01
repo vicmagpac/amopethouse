@@ -22,20 +22,80 @@ export class PaginaInstitucional {}
 @Component({
   selector: 'app-sobre',
   imports: [PaginaInstitucional, RouterLink],
+  styleUrl: './paginas.scss',
   template: `
     <app-pagina-institucional>
       <h1>Sobre a Amo Pet House</h1>
-      <p>Somos um espaço familiar em Papicu, Fortaleza, pensado para cães e gatos se sentirem em casa. Poucos pets por vez, sem gaiolas, com rotina respeitada e cuidado individualizado.</p>
-      <p>Apoio de confiança para a sua rotina com o seu pet: hospedagem, creche, visitas em casa, passeios, transporte e acompanhamento veterinário.</p>
-      <a class="botao principal" routerLink="/cadastrar">Começar agora</a>
+      <p class="abertura">
+        Um espaço familiar em Papicu, Fortaleza, pensado para cães e gatos se sentirem em casa —
+        e para você viajar ou passar o dia fora com o coração mais leve.
+      </p>
+
+      <article class="cartao">
+        <h2>Quem somos</h2>
+        <p class="resumo">Cuidado próximo, como em casa. Sem gaiolas e sem superlotação.</p>
+        <p>
+          A Amo Pet House nasceu do jeito que a gente acredita que um pet deve ser cuidado: com presença,
+          calma e respeito à rotina que ele já tem. Não somos um canil nem um depósito de animais.
+          Somos um ambiente familiar, com poucos pets por vez, para cada um receber atenção de verdade.
+        </p>
+        <p>
+          Cães e gatos circulam livres, descansam quando precisam e são acompanhados de perto.
+          A proposta é simples: confiança para você e bem-estar para o seu pet.
+        </p>
+      </article>
+
+      <article class="cartao">
+        <h2>Como cuidamos</h2>
+        <p class="resumo">Rotina respeitada, alimentação do tutor e cuidado individualizado.</p>
+        <p>
+          Cada animal chega com sua história: horário de comida, medicação, medo de trovão, jeito de dormir.
+          A gente pergunta, anota e segue o que funciona na casa de vocês. Não empurramos uma rotina genérica
+          para caber todo mundo no mesmo molde.
+        </p>
+        <ul>
+          <li>Poucos pets por vez, para não virar correria</li>
+          <li>Ambiente livre, sem gaiolas nem suítes fechadas</li>
+          <li>Alimentação e medicação conforme a orientação do tutor</li>
+          <li>Cães e gatos, com avaliação de convívio antes da estadia</li>
+        </ul>
+      </article>
+
+      <article class="cartao">
+        <h2>O que oferecemos</h2>
+        <p class="resumo">Apoio para a sua rotina: de um dia fora até a viagem inteira.</p>
+        <p>
+          Hospedagem afetiva, creche em turnos de 4h ou 8h, pet sitter na sua casa, passeios,
+          transporte e acompanhamento em consultas. Cada serviço existe para um momento diferente —
+          e a gente ajuda a escolher o que cabe no seu caso.
+        </p>
+        <p>
+          Estamos em Papicu, Fortaleza. Eco friendly no jeito de cuidar do espaço e dos animais,
+          com o mesmo cuidado que você esperaria de alguém da família.
+        </p>
+      </article>
+
+      <p class="fechamento">
+        Quer conhecer o espaço ou tirar dúvida antes de reservar? Chama no WhatsApp ou cria sua conta
+        para cadastrar os dados do seu pet.
+      </p>
+      <div class="ctas">
+        <a class="botao principal" routerLink="/cadastrar">Criar minha conta</a>
+        <a class="botao fantasma" routerLink="/servicos">Ver serviços</a>
+        <a class="botao fantasma" [href]="whatsapp" target="_blank" rel="noopener">WhatsApp {{ whatsappRotulo }}</a>
+      </div>
     </app-pagina-institucional>
   `,
 })
-export class Sobre {}
+export class Sobre {
+  protected readonly whatsapp = `https://wa.me/${ambiente.whatsapp}`;
+  protected readonly whatsappRotulo = ambiente.whatsappRotulo;
+}
 
 @Component({
   selector: 'app-servicos',
   imports: [PaginaInstitucional, RouterLink],
+  styleUrl: './paginas.scss',
   template: `
     <app-pagina-institucional>
       <h1>Serviços</h1>
@@ -44,7 +104,7 @@ export class Sobre {}
         Escolha o serviço que combina com o dia do seu cão ou gato.
       </p>
 
-      <article class="servico">
+      <article class="cartao">
         <h2>Hospedagem afetiva</h2>
         <p class="resumo">Cuidado 24h para cães e gatos, com segurança, atenção individual e presença constante.</p>
         <p>
@@ -64,7 +124,7 @@ export class Sobre {}
         </ul>
       </article>
 
-      <article class="servico">
+      <article class="cartao">
         <h2>Creche</h2>
         <p class="resumo">Para quem passa o dia fora: supervisão, brincadeira e descanso em turnos de 4h ou 8h.</p>
         <p>
@@ -84,7 +144,7 @@ export class Sobre {}
         </ul>
       </article>
 
-      <article class="servico">
+      <article class="cartao">
         <h2>Pet sitter</h2>
         <p class="resumo">Visitas na sua casa para preservar a rotina. Indicado para gatos e pets que preferem ficar no lar.</p>
         <p>
@@ -104,7 +164,7 @@ export class Sobre {}
         </ul>
       </article>
 
-      <article class="servico">
+      <article class="cartao">
         <h2>Passeios</h2>
         <p class="resumo">Caminhadas de 1 hora com foco em movimento, estímulo e gasto de energia.</p>
         <p>
@@ -124,7 +184,7 @@ export class Sobre {}
         </ul>
       </article>
 
-      <article class="servico">
+      <article class="cartao">
         <h2>Transporte pet</h2>
         <p class="resumo">Leva e traz com segurança e conforto, para o hotel, a creche ou o veterinário.</p>
         <p>
@@ -144,7 +204,7 @@ export class Sobre {}
         </ul>
       </article>
 
-      <article class="servico">
+      <article class="cartao">
         <h2>Acompanhamento</h2>
         <p class="resumo">Apoio em consultas, exames e outros compromissos veterinários.</p>
         <p>
@@ -174,45 +234,6 @@ export class Sobre {}
       </div>
     </app-pagina-institucional>
   `,
-  styles: `
-    .abertura,
-    .fechamento {
-      font-size: 1.05rem;
-      line-height: 1.55;
-    }
-    .servico {
-      background: #fff;
-      border-radius: 18px;
-      padding: 1.35rem 1.4rem 1.2rem;
-      margin: 1.4rem 0;
-      box-shadow: 0 10px 30px rgb(74 103 65 / 8%);
-    }
-    .servico h2 {
-      margin: 0 0 0.4rem;
-    }
-    .resumo {
-      color: var(--verde);
-      font-weight: 700;
-      margin: 0 0 0.85rem;
-    }
-    .servico p,
-    .servico li {
-      line-height: 1.55;
-    }
-    .servico ul {
-      margin: 0.4rem 0 0;
-      padding-left: 1.15rem;
-    }
-    .servico li {
-      margin-bottom: 0.35rem;
-    }
-    .ctas {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-      margin-top: 0.5rem;
-    }
-  `,
 })
 export class Servicos {
   protected readonly whatsapp = `https://wa.me/${ambiente.whatsapp}`;
@@ -221,27 +242,170 @@ export class Servicos {
 
 @Component({
   selector: 'app-regras',
-  imports: [PaginaInstitucional],
+  imports: [PaginaInstitucional, RouterLink],
+  styleUrl: './paginas.scss',
   template: `
     <app-pagina-institucional>
       <h1>Regras da estadia</h1>
-      <p>Para o bem-estar de todos, pedimos vacinas em dia (antirrábica e demais indicadas para a espécie), informações de rotina alimentar e medicação, e horários combinados de entrada e saída.</p>
-      <p>O ambiente é livre, sem gaiolas, com poucos pets por vez. Animais agressivos ou sem histórico vacinal podem ser recusados até avaliação.</p>
+      <p class="abertura">
+        As regras existem para o seu pet, para os outros animais e para quem cuida.
+        Combinamos tudo com transparência antes da primeira reserva.
+      </p>
+
+      <article class="cartao">
+        <h2>Vacinas e saúde</h2>
+        <p class="resumo">Vacinas em dia são condição para o convívio no espaço.</p>
+        <p>
+          Pedimos antirrábica e as demais vacinas indicadas para a espécie, além de vermífugo e
+          controle de pulgas e carrapatos em dia. Sem comprovação, a reserva pode ser recusada
+          até uma avaliação. Pets doentes, com vômito, diarreia ou suspeita de doença contagiosa
+          não devem vir até o veterinário liberar.
+        </p>
+        <ul>
+          <li>Carteira de vacinação atualizada (foto ou original)</li>
+          <li>Informar alergias, medicação e restrições alimentares</li>
+          <li>Avisar cio, cirurgia recente ou qualquer alteração de saúde</li>
+        </ul>
+      </article>
+
+      <article class="cartao">
+        <h2>Rotina, comida e medicação</h2>
+        <p class="resumo">Você nos conta o que o pet já faz em casa. A gente segue.</p>
+        <p>
+          Traga a ração ou a comida que ele já come, na quantidade do período, e explique horários.
+          Medicamentos vêm identificados, com dose e horário. Não substituímos conduta veterinária
+          e não improvisamos dieta sem o seu combinado.
+        </p>
+        <ul>
+          <li>Alimentação fornecida pelo tutor, sempre que possível</li>
+          <li>Medicação somente com orientação clara por escrito</li>
+          <li>Objetos de apego (caminha, brinquedo, fucinho) são bem-vindos</li>
+        </ul>
+      </article>
+
+      <article class="cartao">
+        <h2>Convívio e comportamento</h2>
+        <p class="resumo">O espaço é livre, com poucos pets. Nem todo animal se encaixa nesse modelo.</p>
+        <p>
+          Não usamos gaiolas. Por isso avaliamos se o pet convive bem com outros, se aceita manejo
+          e se o temperamento permite um ambiente compartilhado. Animais agressivos com pessoas ou
+          com outros pets podem ser recusados, ou encaminhados para pet sitter em casa,
+          que costuma ser mais seguro para eles.
+        </p>
+        <ul>
+          <li>Poucos animais por vez, para reduzir estresse</li>
+          <li>Coleira e guia em bom estado, no caso de cães</li>
+          <li>Gatos: caixa de transporte para o deslocamento</li>
+          <li>Histórico de mordida ou briga precisa ser dito na conversa prévia</li>
+        </ul>
+      </article>
+
+      <article class="cartao">
+        <h2>Horários, reserva e pagamento</h2>
+        <p class="resumo">Entrada e saída combinadas. Reserva pelo site; cobrança no checkout presencial.</p>
+        <p>
+          A reserva é confirmada depois da conversa e dos dados do pet na sua conta.
+          O pagamento deste recorte é feito no local, na entrada ou na saída, conforme combinado —
+          não há cobrança online por enquanto. Atrasos sem aviso atrapalham o ritmo dos outros pets;
+          avise se o horário mudar.
+        </p>
+        <ul>
+          <li>Horário de chegada e busca definidos na reserva</li>
+          <li>Cancelamento: avise com a antecedência combinada no WhatsApp</li>
+          <li>Valores e formas de pagamento são alinhados antes do dia</li>
+        </ul>
+      </article>
+
+      <p class="fechamento">
+        Em caso de dúvida, fale com a gente antes de agendar. É melhor combinar cedo do que
+        descobrir no dia que o serviço não cabe para aquele pet.
+      </p>
+      <div class="ctas">
+        <a class="botao principal" routerLink="/cadastrar">Criar minha conta</a>
+        <a class="botao fantasma" [href]="whatsapp" target="_blank" rel="noopener">WhatsApp {{ whatsappRotulo }}</a>
+      </div>
     </app-pagina-institucional>
   `,
 })
-export class Regras {}
+export class Regras {
+  protected readonly whatsapp = `https://wa.me/${ambiente.whatsapp}`;
+  protected readonly whatsappRotulo = ambiente.whatsappRotulo;
+}
 
 @Component({
   selector: 'app-contato',
-  imports: [PaginaInstitucional],
+  imports: [PaginaInstitucional, RouterLink],
+  styleUrl: './paginas.scss',
   template: `
     <app-pagina-institucional>
       <h1>Contato</h1>
-      <p>Papicu — Fortaleza</p>
-      <p>Instagram: <a href="https://instagram.com/amopethouse" target="_blank" rel="noopener">@amopethouse</a></p>
-      <p>WhatsApp: <a href="https://wa.me/5585992030506" target="_blank" rel="noopener">(85) 99203-0506</a></p>
+      <p class="abertura">
+        Fale direto com a Amo Pet House. WhatsApp é o caminho mais rápido para tirar dúvida,
+        pedir valor ou combinar uma visita em Papicu.
+      </p>
+
+      <article class="cartao">
+        <h2>WhatsApp</h2>
+        <p class="resumo">O jeito mais simples de combinar um cuidado.</p>
+        <p>
+          Mande uma mensagem com o nome do pet, a espécie e o que você precisa
+          (hospedagem, creche, passeio, transporte ou visita em casa). Respondemos por lá
+          com disponibilidade, valores e o que precisamos saber antes da reserva.
+        </p>
+        <p>
+          <a [href]="whatsapp" target="_blank" rel="noopener">{{ whatsappRotulo }}</a>
+        </p>
+      </article>
+
+      <article class="cartao">
+        <h2>Instagram</h2>
+        <p class="resumo">Bastidores, rotina e o dia a dia com os pets.</p>
+        <p>
+          Acompanhe avisos, fotos do espaço e novidades. Para reserva e dúvidas objetivas,
+          o WhatsApp continua sendo o canal principal.
+        </p>
+        <p>
+          <a [href]="instagram" target="_blank" rel="noopener">{{ instagramRotulo }}</a>
+        </p>
+      </article>
+
+      <article class="cartao">
+        <h2>Onde estamos</h2>
+        <p class="resumo">Papicu — Fortaleza, Ceará.</p>
+        <p>
+          Atendemos tutores da região e de Fortaleza que precisam de um cuidado próximo,
+          sem pet shop lotado. O endereço exato e o melhor horário para conhecer o espaço
+          combinamos no WhatsApp, para receber você com calma e sem atropelo na rotina dos pets.
+        </p>
+        <ul>
+          <li>Bairro: Papicu, Fortaleza</li>
+          <li>Cães e gatos, com avaliação prévia</li>
+          <li>Visita ao espaço mediante combinado</li>
+        </ul>
+      </article>
+
+      <article class="cartao">
+        <h2>Como começar</h2>
+        <p class="resumo">Crie sua conta, cadastre o pet e fale com a gente.</p>
+        <p>
+          Com a conta pronta, você registra vacinas, temperamento e a rotina do animal.
+          Isso agiliza a conversa e deixa a estadia mais segura para todo mundo.
+        </p>
+      </article>
+
+      <p class="fechamento">
+        Prefere se apresentar pelo site? Crie a conta e depois chama no WhatsApp citando o nome do pet.
+      </p>
+      <div class="ctas">
+        <a class="botao principal" [href]="whatsapp" target="_blank" rel="noopener">Chamar no WhatsApp</a>
+        <a class="botao fantasma" routerLink="/cadastrar">Criar minha conta</a>
+      </div>
     </app-pagina-institucional>
   `,
 })
-export class Contato {}
+export class Contato {
+  protected readonly whatsapp = `https://wa.me/${ambiente.whatsapp}`;
+  protected readonly whatsappRotulo = ambiente.whatsappRotulo;
+  protected readonly instagram = ambiente.instagram;
+  protected readonly instagramRotulo = ambiente.instagramRotulo;
+}

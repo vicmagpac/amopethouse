@@ -1,19 +1,46 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { MatListItem, MatListItemIcon, MatListItemTitle, MatNavList } from '@angular/material/list';
+import { MatIcon } from '@angular/material/icon';
 import { AutenticacaoService } from '../../nucleo/servicos/autenticacao.service';
 import { Cabecalho } from './cabecalho';
 import { Rodape } from './rodape';
 
 @Component({
   selector: 'app-casca-conta',
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, Cabecalho, Rodape],
+  imports: [
+    RouterOutlet,
+    RouterLink,
+    RouterLinkActive,
+    Cabecalho,
+    Rodape,
+    MatNavList,
+    MatListItem,
+    MatListItemIcon,
+    MatListItemTitle,
+    MatIcon,
+  ],
   template: `
     <app-cabecalho />
     <section class="conta">
-      <aside>
-        <p>Olá, {{ autenticacao.usuario()?.nome }}</p>
-        <a routerLink="/conta/animais" routerLinkActive="ativo">Meus animais</a>
-        <a routerLink="/conta/perfil" routerLinkActive="ativo">Meu perfil</a>
+      <aside class="menu-conta">
+        <div class="saudacao">
+          <div class="avatar" aria-hidden="true">{{ iniciais() }}</div>
+          <div>
+            <p class="ola">Olá</p>
+            <p class="nome">{{ autenticacao.usuario()?.nome }}</p>
+          </div>
+        </div>
+        <mat-nav-list>
+          <a mat-list-item routerLink="/conta/animais" routerLinkActive="ativo">
+            <mat-icon matListItemIcon>pets</mat-icon>
+            <span matListItemTitle>Meus animais</span>
+          </a>
+          <a mat-list-item routerLink="/conta/perfil" routerLinkActive="ativo">
+            <mat-icon matListItemIcon>person</mat-icon>
+            <span matListItemTitle>Meu perfil</span>
+          </a>
+        </mat-nav-list>
       </aside>
       <div class="painel">
         <router-outlet />
@@ -24,38 +51,79 @@ import { Rodape } from './rodape';
   styles: `
     .conta {
       display: grid;
-      grid-template-columns: 240px 1fr;
-      min-height: calc(100vh - 220px);
+      grid-template-columns: 280px minmax(0, 1fr);
+      gap: 1.5rem;
+      max-width: 1180px;
+      margin: 1.5rem auto 2.5rem;
+      padding: 0 1.25rem;
+      min-height: calc(100vh - 240px);
+      align-items: start;
     }
-    aside {
-      background: #c1c9b7;
-      padding: 1.5rem;
+    .menu-conta {
+      background: #fff;
+      border-radius: 20px;
+      padding: 1.25rem 0.75rem 0.75rem;
+      box-shadow: 0 10px 30px rgb(74 103 65 / 8%);
+      position: sticky;
+      top: 6.5rem;
+    }
+    .saudacao {
       display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
+      align-items: center;
+      gap: 0.85rem;
+      padding: 0.35rem 0.75rem 1.1rem;
     }
-    aside p {
-      font-weight: 700;
-      color: #4a6741;
+    .avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--verde);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      flex-shrink: 0;
     }
-    aside a {
-      color: #2f432c;
+    .ola {
+      margin: 0;
+      font-size: 0.8rem;
+      color: #5b6f55;
       font-weight: 600;
     }
-    aside a.ativo {
-      color: #4a6741;
-      text-decoration: underline;
+    .nome {
+      margin: 0.1rem 0 0;
+      font-weight: 800;
+      color: var(--verde);
+      line-height: 1.2;
+    }
+    a.ativo {
+      background: rgb(74 103 65 / 10%);
+      border-radius: 12px;
     }
     .painel {
-      padding: 1.5rem;
+      min-width: 0;
     }
     @media (max-width: 800px) {
       .conta {
         grid-template-columns: 1fr;
+        margin-top: 1rem;
+      }
+      .menu-conta {
+        position: static;
       }
     }
   `,
 })
 export class CascaConta {
   protected readonly autenticacao = inject(AutenticacaoService);
+  protected readonly iniciais = computed(() => {
+    const partes = (this.autenticacao.usuario()?.nome ?? '')
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean);
+    return partes
+      .slice(0, 2)
+      .map((parte) => parte[0]?.toUpperCase() ?? '')
+      .join('');
+  });
 }

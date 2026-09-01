@@ -2,9 +2,14 @@ import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
+import { ambiente } from '../ambiente';
 import { AutenticacaoService } from '../servicos/autenticacao.service';
 
 export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
+  if (!req.url.startsWith(ambiente.apiUrl)) {
+    return next(req);
+  }
+
   const autenticacao = inject(AutenticacaoService);
   const router = inject(Router);
   const token = autenticacao.token();

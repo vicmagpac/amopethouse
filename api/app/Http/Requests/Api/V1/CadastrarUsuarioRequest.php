@@ -53,10 +53,23 @@ class CadastrarUsuarioRequest extends FormRequest
 
     protected function prepareForValidation(): void
     {
-        if ($this->has('cpf')) {
-            $this->merge([
-                'cpf' => preg_replace('/\D+/', '', (string) $this->input('cpf')),
-            ]);
+        $ajustes = [];
+
+        foreach (['cpf', 'telefone', 'cep', 'contato_emergencia_telefone'] as $campo) {
+            if ($this->exists($campo)) {
+                $digitos = preg_replace('/\D+/', '', (string) $this->input($campo));
+                $ajustes[$campo] = $digitos === '' ? null : $digitos;
+            }
+        }
+
+        if ($this->filled('estado')) {
+            $ajustes['estado'] = strtoupper((string) $this->input('estado'));
+        } elseif ($this->exists('estado') && $this->input('estado') === '') {
+            $ajustes['estado'] = null;
+        }
+
+        if ($ajustes !== []) {
+            $this->merge($ajustes);
         }
     }
 }
