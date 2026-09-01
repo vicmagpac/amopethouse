@@ -1,145 +1,192 @@
+:host {
+  display: block;
+}
+
+.hero,
+.bloco {
+  padding: 2.5rem 5vw 3rem;
+}
+
 .hero {
-  display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
-  gap: 2rem;
-  align-items: center;
-  padding: 3rem 6vw;
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto;
 }
 
 .logo {
-  width: 96px;
-  height: 96px;
+  width: 112px;
+  height: 112px;
   border-radius: 50%;
   object-fit: cover;
   background: #fff;
+  border: 3px solid var(--verde);
 }
 
 .selo {
-  color: #4a6741;
-  font-weight: 700;
-  margin: 1rem 0 0.5rem;
+  margin: 1rem 0 0.4rem;
+  color: var(--verde);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 0.82rem;
 }
 
 h1 {
-  font-size: clamp(2rem, 4vw, 3.4rem);
-  color: #3d5340;
-  line-height: 1.1;
+  margin: 0.4rem 0 1rem;
+  font-size: clamp(1.85rem, 7vw, 3rem);
+  line-height: 1.15;
 }
 
-h1 em {
-  font-style: normal;
-  color: #4a6741;
+h1 span {
+  display: block;
+  color: var(--verde);
 }
 
-.faixa {
-  margin: 1rem 0 1.5rem;
-  background: #4a6741;
+.proposta {
+  background: var(--verde);
   color: #fff;
-  padding: 0.9rem 1.1rem;
-  border-radius: 12px;
-  max-width: 36rem;
+  padding: 1rem 1.15rem;
+  border-radius: 16px;
+  font-weight: 700;
+  font-size: clamp(1rem, 3.6vw, 1.2rem);
+  line-height: 1.4;
+}
+
+.apoio {
+  margin: 1rem 0 1.4rem;
+  font-size: 1.05rem;
+  font-weight: 600;
 }
 
 .ctas {
   display: flex;
   gap: 0.75rem;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
-.hero-foto {
-  width: 100%;
-  border-radius: 28px;
-  object-fit: cover;
-  min-height: 320px;
+.ctas.centro {
+  margin-top: 1.25rem;
 }
 
 .bloco {
-  padding: 3rem 6vw;
   text-align: center;
 }
 
-.bloco.sage {
-  background: #c1c9b7;
+.bloco h2 {
+  margin: 0 0 0.6rem;
+  font-size: clamp(1.4rem, 5vw, 2rem);
+}
+
+.intro {
+  margin: 0 auto 1.5rem;
+  max-width: 36rem;
+}
+
+.intro.claro {
+  color: #f7f4ee;
+}
+
+.bloco.verde {
+  background: var(--verde);
+}
+
+.bloco.verde h2,
+.bloco.verde h3 {
+  color: #fff;
+}
+
+.bloco.verde .cartao h3 {
+  color: var(--verde);
 }
 
 .grade {
+  list-style: none;
+  padding: 0;
+  margin: 0 auto 1.5rem;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1rem;
-  margin: 1.5rem 0 2rem;
+  grid-template-columns: 1fr;
+  gap: 0.9rem;
   text-align: left;
+  max-width: 1080px;
 }
 
 .cartao {
   background: #fff;
   border-radius: 18px;
-  padding: 1.2rem;
-  box-shadow: 0 8px 24px rgb(74 103 65 / 8%);
+  padding: 1.15rem 1.2rem 1.2rem;
+  box-shadow: 0 8px 24px rgb(47 67 44 / 8%);
+}
+
+.cartao p {
+  margin: 0.35rem 0 0;
+  line-height: 1.45;
 }
 
 .pata {
   display: inline-block;
-  width: 14px;
-  height: 14px;
-  background: #e5a9b4;
+  width: 12px;
+  height: 12px;
+  background: var(--rosa);
   border-radius: 50%;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.45rem;
 }
 
-.duas-colunas {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-  align-items: center;
-  text-align: left;
+.selo-eco {
+  display: inline-block;
+  margin: 0 0 0.75rem;
+  padding: 0.3rem 0.8rem;
+  border: 2px solid var(--verde);
+  border-radius: 999px;
+  font-weight: 800;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--verde);
 }
 
-.duas-colunas img {
-  width: 100%;
-  border-radius: 24px;
-}
-
-.lista-pata {
+.contato {
   list-style: none;
   padding: 0;
   margin: 1rem 0 0;
-}
-
-.lista-pata li {
-  padding-left: 1.4rem;
-  position: relative;
-  margin: 0.45rem 0;
-  font-weight: 600;
-  color: #2f432c;
-}
-
-.lista-pata li::before {
-  content: '';
-  width: 10px;
-  height: 10px;
-  background: #e5a9b4;
-  border-radius: 50%;
-  position: absolute;
-  left: 0;
-  top: 0.45rem;
-}
-
-.chamada {
-  background: #4a6741;
-  color: #fff;
-  text-align: center;
-  padding: 3rem 1rem;
-  font-size: 1.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
   font-weight: 700;
 }
 
-.chamada .botao {
-  margin-top: 1rem;
+.contato a {
+  color: var(--verde);
 }
 
-@media (max-width: 900px) {
+@media (min-width: 640px) {
   .hero,
-  .duas-colunas {
-    grid-template-columns: 1fr;
+  .bloco {
+    padding: 3.2rem 6vw;
+  }
+
+  .grade {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .ctas .botao {
+    min-height: 48px;
+  }
+}
+
+@media (min-width: 960px) {
+  .grade {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 639px) {
+  .ctas {
+    flex-direction: column;
+  }
+
+  .ctas .botao {
+    width: 100%;
+    min-height: 48px;
   }
 }

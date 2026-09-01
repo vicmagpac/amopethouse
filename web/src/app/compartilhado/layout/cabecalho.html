@@ -1,8 +1,21 @@
 <header class="cabecalho">
-  <a routerLink="/" class="marca">
-    <img src="/brand/logo.jpg" alt="Amo Pet House" />
-    <span>Amo Pet House</span>
-  </a>
+  <div class="topo">
+    <a routerLink="/" class="marca">
+      <img src="/brand/logo.jpg" alt="Logo Amo Pet House" />
+      <span>Amo Pet House</span>
+    </a>
+
+    <div class="acoes">
+      @if (autenticacao.autenticado()) {
+        <a class="botao conta" routerLink="/conta">Minha conta</a>
+        <button type="button" class="botao sair" (click)="autenticacao.sair().subscribe()">Sair</button>
+      } @else {
+        <a class="botao fantasma-claro" routerLink="/entrar">Entrar</a>
+        <a class="botao rosa" routerLink="/cadastrar">Cadastrar</a>
+      }
+      <a class="whatsapp" [href]="whatsapp" target="_blank" rel="noopener">WhatsApp</a>
+    </div>
+  </div>
 
   <nav class="menu">
     <a routerLink="/" routerLinkActive="ativo" [routerLinkActiveOptions]="{ exact: true }">Início</a>
@@ -10,16 +23,8 @@
     <a routerLink="/sobre" routerLinkActive="ativo">Sobre</a>
     <a routerLink="/regras" routerLinkActive="ativo">Regras</a>
     <a routerLink="/contato" routerLinkActive="ativo">Contato</a>
-  </nav>
-
-  <div class="acoes">
     @if (autenticacao.autenticado()) {
-      <a class="botao fantasma" routerLink="/conta/animais">Meus animais</a>
-      <button type="button" class="botao texto" (click)="autenticacao.sair().subscribe()">Sair</button>
-    } @else {
-      <a class="botao fantasma" routerLink="/entrar">Entrar</a>
-      <a class="botao principal" routerLink="/cadastrar">Cadastrar</a>
+      <a routerLink="/conta" routerLinkActive="ativo">Minha conta</a>
     }
-    <a class="whatsapp" [href]="whatsapp" target="_blank" rel="noopener">WhatsApp</a>
-  </div>
+  </nav>
 </header>
