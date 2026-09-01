@@ -1,0 +1,67 @@
+<h1>Serviços e preços</h1>
+<p class="subtitulo">A casa tem um limite de animais ao mesmo tempo. Hospedagem e creche compartilham essa vaga.</p>
+@if (erros().length) {
+  <ul class="erros">
+    @for (erro of erros(); track erro) {
+      <li>{{ erro }}</li>
+    }
+  </ul>
+}
+@if (ok()) {
+  <p class="ok">{{ ok() }}</p>
+}
+
+<mat-card appearance="outlined" class="casa">
+  <mat-card-header>
+    <mat-card-title>Capacidade da casa</mat-card-title>
+    <mat-card-subtitle>Quantos animais cabem juntos em hospedagem e creche. Passeio, pet sitter, transporte e acompanhamento não entram nessa conta.</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <form class="conta-form casa-form" [formGroup]="casa" (ngSubmit)="salvarCasa()">
+      <mat-form-field appearance="outline">
+        <mat-label>Animais ao mesmo tempo</mat-label>
+        <input matInput type="number" min="1" max="30" formControlName="capacidade_casa" />
+      </mat-form-field>
+      <button matButton="filled" type="submit" [disabled]="casa.invalid">Salvar capacidade</button>
+    </form>
+  </mat-card-content>
+</mat-card>
+
+<div class="grade">
+  @for (tipo of tipos(); track tipo.id) {
+    <mat-card appearance="outlined">
+      <mat-card-header>
+        <mat-card-title>{{ tipo.nome }}</mat-card-title>
+        <mat-card-subtitle>{{ tipo.slug }} · agora {{ reais(tipo.preco) }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <form class="conta-form" [formGroup]="formularios[tipo.id]" (ngSubmit)="salvar(tipo)">
+          <mat-form-field appearance="outline">
+            <mat-label>Preço</mat-label>
+            <input matInput type="number" step="0.01" formControlName="preco" />
+          </mat-form-field>
+          @if (tipo.slug === 'creche') {
+            <mat-form-field appearance="outline">
+              <mat-label>Preço turno 8h</mat-label>
+              <input matInput type="number" step="0.01" formControlName="preco_turno_longo" />
+            </mat-form-field>
+          }
+          <mat-form-field appearance="outline">
+            <mat-label>Capacidade</mat-label>
+            <input matInput type="number" formControlName="capacidade" />
+          </mat-form-field>
+          @if (tipo.slug === 'hospedagem' || tipo.slug === 'creche') {
+            <p class="dica">Este teto vale junto com a capacidade da casa.</p>
+          }
+          <mat-form-field appearance="outline">
+            <mat-label>Duração (minutos)</mat-label>
+            <input matInput type="number" formControlName="duracao_minutos" />
+          </mat-form-field>
+          <mat-slide-toggle formControlName="exige_vacina">Exige vacina</mat-slide-toggle>
+          <mat-slide-toggle formControlName="ativo">Ativo no site</mat-slide-toggle>
+          <button matButton="filled" type="submit">Salvar</button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>

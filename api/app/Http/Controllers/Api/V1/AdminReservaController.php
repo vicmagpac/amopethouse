@@ -8,9 +8,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\CriarBloqueioRequest;
 use App\Http\Resources\Api\V1\ReservaResource;
 use App\Models\BloqueioEquipe;
+use App\Models\Configuracao;
 use App\Models\Pagamento;
 use App\Models\Reserva;
 use App\Models\TipoServico;
+use App\Services\DisponibilidadeService;
 use App\Services\ReservaService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -18,7 +20,10 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class AdminReservaController extends Controller
 {
-    public function __construct(private readonly ReservaService $reservas) {}
+    public function __construct(
+        private readonly ReservaService $reservas,
+        private readonly DisponibilidadeService $disponibilidade,
+    ) {}
 
     public function index(Request $request): AnonymousResourceCollection
     {
@@ -42,7 +47,7 @@ class AdminReservaController extends Controller
         $hoje = now()->startOfDay();
         $amanha = $hoje->copy()->addDay();
         $semana = $hoje->copy()->addDays(7);
-        $ativas = [StatusReserva::Confirmada->value, StatusReserva::EmAndamento->value];
+        $ativas = StatusReserva::queOcupamVaga();
 
         $porServico = TipoServico::query()
             ->withCount([
@@ -67,6 +72,8 @@ class AdminReservaController extends Controller
                     ->where('inicio', '<', $amanha)
                     ->where('fim', '>', $hoje)
                     ->count(),
+                'animais_na_casa_hoje' => $this->disponibilidade->ocupacaoCasa($hoje, $amanha),
+                'capacidade_casa' => Configuracao::capacidadeCasa(),
                 'proximos_7_dias' => Reserva::query()
                     ->whereNot('status', StatusReserva::Cancelada)
                     ->where('inicio', '>=', $hoje)
@@ -90,6 +97,13 @@ class AdminReservaController extends Controller
                 )->resolve(),
             ],
         ]);
+    }
+
+    public function confirmar(Reserva $reserva): ReservaResource
+    {
+        $this->authorize('gerenciar', $reserva);
+
+        return new ReservaResource($this->reservas->confirmar($reserva));
     }
 
     public function iniciar(Reserva $reserva): ReservaResource

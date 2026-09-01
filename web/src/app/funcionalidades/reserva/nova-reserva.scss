@@ -1,0 +1,77 @@
+h1 {
+  margin-bottom: 0.25rem;
+}
+
+.subtitulo {
+  color: #5b6f55;
+}
+
+.servicos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 0.75rem;
+  margin: 1rem 0;
+}
+
+.tipo {
+  text-align: left;
+  border: 1px solid #d5ddd0;
+  background: #f7f9f4;
+  border-radius: 16px;
+  padding: 0.9rem;
+  cursor: pointer;
+  font: inherit;
+}
+
+.tipo.ativo {
+  border-color: var(--verde);
+  box-shadow: 0 0 0 2px rgb(74 103 65 / 20%);
+}
+
+.tipo strong,
+.tipo span,
+.tipo small {
+  display: block;
+}
+
+.tipo span {
+  color: var(--verde);
+  font-weight: 800;
+  margin: 0.2rem 0;
+}
+
+.tipo small {
+  color: #5b6f55;
+}
+
+.grade {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem 1rem;
+  margin-top: 0.25rem;
+  padding-top: 1.15rem;
+  border-top: 1px solid rgb(74 103 65 / 14%);
+}
+
+.largo,
+.acoes {
+  grid-column: 1 / -1;
+}
+
+.pets {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin: 0.5rem 0;
+}
+
+@media (max-width: 700px) {
+  .grade {
+    grid-template-columns: 1fr;
+  }
+
+  .largo,
+  .acoes {
+    grid-column: 1;
+  }
+}

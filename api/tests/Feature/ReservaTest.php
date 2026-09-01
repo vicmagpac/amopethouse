@@ -49,14 +49,14 @@ class ReservaTest extends TestCase
             'data_fim' => $saida,
         ])
             ->assertCreated()
-            ->assertJsonPath('data.status', StatusReserva::Confirmada->value)
+            ->assertJsonPath('data.status', StatusReserva::PendenteConfirmacao->value)
             ->assertJsonPath('data.pagamento.status', StatusPagamento::AReceber->value)
             ->assertJsonPath('data.pagamento.meio', 'no_local');
 
         $this->assertDatabaseHas('reservas', [
             'usuario_id' => $tutor->id,
             'tipo_servico_id' => $tipo->id,
-            'status' => StatusReserva::Confirmada->value,
+            'status' => StatusReserva::PendenteConfirmacao->value,
         ]);
     }
 
@@ -86,7 +86,7 @@ class ReservaTest extends TestCase
             'data_fim' => now()->addDays(3)->toDateString(),
         ])
             ->assertCreated()
-            ->assertJsonPath('data.status', StatusReserva::Confirmada->value);
+            ->assertJsonPath('data.status', StatusReserva::PendenteConfirmacao->value);
     }
 
     public function test_hospedagem_sem_vacina_e_recusada(): void
@@ -134,6 +134,25 @@ class ReservaTest extends TestCase
         $this->getJson('/api/v1/reservas')
             ->assertOk()
             ->assertJsonCount(1, 'data');
+    }
+
+    public function test_admin_confirma_pedido_de_reserva(): void
+    {
+        $admin = Usuario::factory()->create(['papel' => PapelUsuario::Administrador]);
+        $tutor = Usuario::factory()->create();
+        $tipo = $this->tipo('passeio');
+        $reserva = $tutor->reservas()->create([
+            'tipo_servico_id' => $tipo->id,
+            'status' => StatusReserva::PendenteConfirmacao,
+            'inicio' => now()->addDay()->setTime(9, 0),
+            'fim' => now()->addDay()->setTime(10, 0),
+            'valor_total' => 50,
+        ]);
+
+        Sanctum::actingAs($admin);
+        $this->postJson("/api/v1/admin/reservas/{$reserva->id}/confirmar")
+            ->assertOk()
+            ->assertJsonPath('data.status', StatusReserva::Confirmada->value);
     }
 
     public function test_admin_marca_pagamento_recebido(): void

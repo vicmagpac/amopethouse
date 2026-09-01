@@ -10,8 +10,8 @@ enum StatusPagamento: string
     public function rotulo(): string
     {
         return match ($this) {
-            self::AReceber => 'A receber no local',
-            self::Recebido => 'Recebido',
+            self::AReceber => 'Pendente de pagamento',
+            self::Recebido => 'Pago',
         };
     }
 }

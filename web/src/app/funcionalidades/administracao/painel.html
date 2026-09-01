@@ -1,0 +1,86 @@
+<div class="cabeca">
+  <div>
+    <h1>Dashboard</h1>
+    <p>Visão da operação em Papicu — ocupação, pagamentos pendentes e agenda.</p>
+  </div>
+  <a matButton="filled" routerLink="/admin/reservas">Ver reservas</a>
+</div>
+
+@if (erros().length) {
+  <ul class="erros">
+    @for (erro of erros(); track erro) {
+      <li>{{ erro }}</li>
+    }
+  </ul>
+}
+
+<div class="kpis">
+  <article class="kpi rosa">
+    <span>Hoje na casa</span>
+    <strong>{{ painel()?.animais_na_casa_hoje ?? 0 }}/{{ painel()?.capacidade_casa ?? 3 }}</strong>
+    <small>animais de hospedagem e creche</small>
+    <mat-icon>pets</mat-icon>
+  </article>
+  <article class="kpi verde">
+    <span>Próximos 7 dias</span>
+    <strong>{{ painel()?.proximos_7_dias ?? 0 }}</strong>
+    <small>entradas confirmadas</small>
+    <mat-icon>calendar_month</mat-icon>
+  </article>
+  <article class="kpi sage">
+    <span>Pendente de pagamento</span>
+    <strong>{{ reais(painel()?.a_receber) }}</strong>
+    <small>checkout presencial</small>
+    <mat-icon>payments</mat-icon>
+  </article>
+  <article class="kpi escuro">
+    <span>Pago no mês</span>
+    <strong>{{ reais(painel()?.recebido_mes) }}</strong>
+    <small>já marcado no painel</small>
+    <mat-icon>trending_up</mat-icon>
+  </article>
+</div>
+
+<div class="grade">
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>Ocupação por serviço</mat-card-title>
+      <mat-card-subtitle>Reservas ativas a partir de hoje. Hospedagem e creche também respeitam a capacidade da casa.</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      @for (item of painel()?.por_servico ?? []; track item.id) {
+        <div class="barra-servico">
+          <div class="rotulo">
+            <span>{{ item.nome }}</span>
+            <b>{{ item.quantidade }}/{{ item.capacidade }}</b>
+          </div>
+          <mat-progress-bar mode="determinate" [value]="percentual(item.quantidade, item.capacidade)" />
+        </div>
+      }
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>Agenda próxima</mat-card-title>
+      <mat-card-subtitle>As próximas entradas confirmadas.</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      @if (!agenda().length) {
+        <p class="vazio">Nenhuma reserva futura no momento.</p>
+      } @else {
+        <ul class="agenda">
+          @for (reserva of agenda(); track reserva.id) {
+            <li>
+              <div>
+                <strong>{{ reserva.tipo_servico?.nome }}</strong>
+                <span>{{ dataHora(reserva.inicio) }} · {{ reserva.tutor?.nome }}</span>
+              </div>
+              <em>{{ reserva.status_rotulo }}</em>
+            </li>
+          }
+        </ul>
+      }
+    </mat-card-content>
+  </mat-card>
+</div>

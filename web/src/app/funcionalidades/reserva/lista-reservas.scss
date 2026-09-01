@@ -1,0 +1,158 @@
+.topo {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+}
+
+h1 {
+  margin: 0 0 0.3rem;
+}
+
+.topo p {
+  margin: 0;
+  color: #5b6f55;
+  max-width: 36rem;
+  line-height: 1.45;
+}
+
+.vazio {
+  text-align: center;
+  padding: 2.5rem 1rem;
+  border: 1px dashed rgb(74 103 65 / 25%);
+  border-radius: 18px;
+  background: #fafbf8;
+}
+
+.vazio mat-icon {
+  font-size: 40px;
+  width: 40px;
+  height: 40px;
+  color: var(--verde);
+}
+
+.vazio h2 {
+  margin: 0.6rem 0 0.35rem;
+}
+
+.vazio p {
+  margin: 0 auto 1.1rem;
+  max-width: 26rem;
+  color: #5b6f55;
+}
+
+.grade {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.cartao {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  background: #fff;
+  border: 1px solid rgb(74 103 65 / 14%);
+  border-radius: 18px;
+  padding: 1.1rem 1.15rem 0.85rem;
+  box-shadow: 0 8px 22px rgb(74 103 65 / 6%);
+}
+
+.cartao.cancelada {
+  opacity: 0.72;
+}
+
+.selos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.selo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  border-radius: 999px;
+  padding: 0.18rem 0.65rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.selo mat-icon {
+  font-size: 14px;
+  width: 14px;
+  height: 14px;
+}
+
+.selo.status {
+  background: rgb(74 103 65 / 10%);
+  color: var(--verde);
+}
+
+.selo.status[data-status='pendente_confirmacao'] {
+  background: #fff3d6;
+  color: #8a5a12;
+}
+
+.selo.status[data-status='em_andamento'] {
+  background: rgb(229 169 180 / 28%);
+  color: #6b3d48;
+}
+
+.selo.status[data-status='concluida'] {
+  background: #eef1ea;
+  color: #5b6f55;
+}
+
+.selo.status[data-status='cancelada'] {
+  background: #f6e8e8;
+  color: #8a3a3a;
+}
+
+.selo.pagamento {
+  background: #f6e8e8;
+  color: #8a3a3a;
+}
+
+.selo.pagamento.pago {
+  background: rgb(74 103 65 / 12%);
+  color: var(--verde);
+}
+
+.cartao h2 {
+  margin: 0.25rem 0 0;
+  font-size: 1.15rem;
+}
+
+.quando,
+.pets {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0;
+  color: #5b6f55;
+  font-size: 0.92rem;
+}
+
+.quando mat-icon,
+.pets mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+.rodape {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: 0.55rem;
+  padding-top: 0.7rem;
+  border-top: 1px solid #edf1ea;
+}
+
+.rodape strong {
+  color: var(--verde);
+  font-size: 1.05rem;
+}

@@ -1,0 +1,30 @@
+<app-cabecalho />
+<section class="conta">
+  <aside class="menu-conta">
+    <div class="saudacao">
+      <div class="avatar" aria-hidden="true">{{ iniciais() }}</div>
+      <div>
+        <p class="ola">Olá</p>
+        <p class="nome">{{ autenticacao.usuario()?.nome }}</p>
+      </div>
+    </div>
+    <mat-nav-list>
+      <a mat-list-item routerLink="/conta/reservas" routerLinkActive="ativo">
+        <mat-icon matListItemIcon>event</mat-icon>
+        <span matListItemTitle>Minhas reservas</span>
+      </a>
+      <a mat-list-item routerLink="/conta/animais" routerLinkActive="ativo">
+        <mat-icon matListItemIcon>pets</mat-icon>
+        <span matListItemTitle>Meus animais</span>
+      </a>
+      <a mat-list-item routerLink="/conta/perfil" routerLinkActive="ativo">
+        <mat-icon matListItemIcon>person</mat-icon>
+        <span matListItemTitle>Meu perfil</span>
+      </a>
+    </mat-nav-list>
+  </aside>
+  <div class="painel">
+    <router-outlet />
+  </div>
+</section>
+<app-rodape />

@@ -1,0 +1,87 @@
+.topo {
+  margin-bottom: 1.15rem;
+}
+
+h1 {
+  margin: 0 0 0.35rem;
+}
+
+h2 {
+  margin: 0 0 0.35rem;
+  font-size: 1.25rem;
+}
+
+.subtitulo {
+  margin: 0;
+  color: #5b6f55;
+  line-height: 1.45;
+}
+
+.preview {
+  width: 160px;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 16px;
+  margin: 0.25rem 0 1rem;
+}
+
+.grade {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.25rem 1rem;
+  margin-top: 0.75rem;
+}
+
+.largo,
+.acoes {
+  grid-column: 1 / -1;
+}
+
+.check {
+  display: flex;
+  align-items: center;
+  min-height: 56px;
+}
+
+.foto-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin: 0.4rem 0 0.8rem;
+}
+
+.rotulo-foto {
+  font-weight: 600;
+  color: var(--texto);
+}
+
+.vacinas {
+  margin-top: 1.5rem;
+  padding-top: 1.35rem;
+  border-top: 1px solid rgb(74 103 65 / 14%);
+}
+
+.vazio {
+  color: #5b6f55;
+}
+
+.vacina-form {
+  margin-top: 1rem;
+}
+
+.acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+@media (max-width: 640px) {
+  .grade {
+    grid-template-columns: 1fr;
+  }
+
+  .largo,
+  .acoes {
+    grid-column: 1;
+  }
+}

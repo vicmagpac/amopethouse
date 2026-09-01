@@ -3,8 +3,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -14,7 +14,7 @@ import { AnimalService } from '../../nucleo/servicos/animal.service';
 import { Animal, RegistroVacina } from '../../nucleo/modelos';
 import { racasPorEspecie, TEMPERAMENTOS, vacinasPorEspecie } from '../../nucleo/listas-animal';
 import { mensagensErro } from '../../compartilhado/util/mensagens-erro';
-import { soData } from '../../compartilhado/util/formatacao';
+import { soData, dataIso, deIso } from '../../compartilhado/util/formatacao';
 
 @Component({
   selector: 'app-formulario-animal',
@@ -22,8 +22,8 @@ import { soData } from '../../compartilhado/util/formatacao';
     ReactiveFormsModule,
     RouterLink,
     MatButtonModule,
-    MatCardModule,
     MatCheckboxModule,
+    MatDatepickerModule,
     MatFormFieldModule,
     MatIcon,
     MatInputModule,
@@ -31,23 +31,7 @@ import { soData } from '../../compartilhado/util/formatacao';
     MatSelectModule,
   ],
   templateUrl: './formulario-animal.html',
-  styles: `
-    .painel-conta { max-width: 860px; }
-    mat-card-title { color: var(--verde); }
-    .preview { width: 160px; height: 160px; object-fit: cover; border-radius: 16px; margin: 0.75rem 0 0.25rem; }
-    .grade { display: grid; grid-template-columns: 1fr 1fr; gap: 0.25rem 1rem; margin-top: 0.75rem; }
-    .largo, .acoes { grid-column: 1 / -1; }
-    .check { display: flex; align-items: center; min-height: 56px; }
-    .foto-campo { display: flex; flex-direction: column; gap: 0.35rem; margin: 0.4rem 0 0.8rem; }
-    .rotulo-foto { font-weight: 600; color: var(--texto); }
-    .vacinas { margin-top: 1.25rem; }
-    .vazio { color: #5b6f55; }
-    .vacina-form { margin-top: 1rem; }
-    @media (max-width: 640px) {
-      .grade { grid-template-columns: 1fr; }
-      .largo, .acoes { grid-column: 1; }
-    }
-  `,
+  styleUrl: './formulario-animal.scss',
 })
 export class FormularioAnimal implements OnInit {
   private readonly fb = inject(FormBuilder);
@@ -73,7 +57,7 @@ export class FormularioAnimal implements OnInit {
     raca: [''],
     porte: ['pequeno', Validators.required],
     sexo: ['macho', Validators.required],
-    data_nascimento: [''],
+    data_nascimento: [null as Date | null],
     peso: [''],
     castrado: [false],
     temperamento: [''],
@@ -95,8 +79,8 @@ export class FormularioAnimal implements OnInit {
   protected readonly vacinaForm = this.fb.nonNullable.group({
     nome: ['', Validators.required],
     nome_outra: [''],
-    aplicada_em: ['', Validators.required],
-    expira_em: [''],
+    aplicada_em: [null as Date | null, Validators.required],
+    expira_em: [null as Date | null],
   });
 
   constructor() {
@@ -145,7 +129,7 @@ export class FormularioAnimal implements OnInit {
             raca: resposta.data.raca ?? '',
             porte: resposta.data.porte,
             sexo: resposta.data.sexo,
-            data_nascimento: resposta.data.data_nascimento ?? '',
+            data_nascimento: deIso(resposta.data.data_nascimento),
             peso: String(resposta.data.peso ?? ''),
             castrado: resposta.data.castrado,
             temperamento: resposta.data.temperamento ?? '',
@@ -175,7 +159,7 @@ export class FormularioAnimal implements OnInit {
     const dados: Record<string, unknown> = {
       ...bruto,
       peso: bruto.peso ? Number(bruto.peso) : null,
-      data_nascimento: bruto.data_nascimento || null,
+      data_nascimento: bruto.data_nascimento ? dataIso(bruto.data_nascimento) : null,
     };
     const requisicao = this.id()
       ? this.animaisApi.atualizar(this.id()!, dados)
@@ -226,10 +210,14 @@ export class FormularioAnimal implements OnInit {
       this.erros.set(['Informe o nome da vacina.']);
       return;
     }
+    if (!dados.aplicada_em) {
+      this.erros.set(['Informe a data da vacina.']);
+      return;
+    }
     corpo.append('nome', nome);
-    corpo.append('aplicada_em', dados.aplicada_em);
+    corpo.append('aplicada_em', dataIso(dados.aplicada_em));
     if (dados.expira_em) {
-      corpo.append('expira_em', dados.expira_em);
+      corpo.append('expira_em', dataIso(dados.expira_em));
     }
     if (this.documentoVacina) {
       corpo.append('documento', this.documentoVacina);
@@ -240,8 +228,8 @@ export class FormularioAnimal implements OnInit {
         this.vacinaForm.reset({
           nome: '',
           nome_outra: '',
-          aplicada_em: '',
-          expira_em: '',
+          aplicada_em: null,
+          expira_em: null,
         });
         this.documentoVacina = undefined;
       },

@@ -27,3 +27,23 @@ export function dataIso(data: Date = new Date()): string {
   const dia = String(data.getDate()).padStart(2, '0');
   return `${ano}-${mes}-${dia}`;
 }
+
+export function deIso(iso: string | null | undefined): Date | null {
+  if (!iso) {
+    return null;
+  }
+  const soDia = iso.slice(0, 10);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(soDia)) {
+    return null;
+  }
+  const [ano, mes, dia] = soDia.split('-').map(Number);
+  return new Date(ano, mes - 1, dia);
+}
+
+export function pago(status: 'a_receber' | 'recebido' | null | undefined): boolean {
+  return status === 'recebido';
+}
+
+export function rotuloPagamento(status: 'a_receber' | 'recebido' | null | undefined): string {
+  return pago(status) ? 'Pago' : 'Pendente de pagamento';
+}

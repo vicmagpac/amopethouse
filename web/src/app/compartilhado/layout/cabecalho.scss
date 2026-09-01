@@ -1,17 +1,43 @@
 .cabecalho {
   position: sticky;
   top: 0;
-  z-index: 20;
-  background: #4a6741;
+  z-index: 30;
+  background: #3d5636;
   color: #fff;
-  padding: 0.75rem 6vw 0.85rem;
+  box-shadow: 0 8px 24px rgb(28 43 31 / 18%);
 }
 
-.topo {
-  display: flex;
+.faixa {
+  display: grid;
+  grid-template-columns: auto auto 1fr auto;
   align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
+  gap: 1.1rem 1.35rem;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0.7rem 1.5rem;
+}
+
+.whatsapp {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #fff;
+  font-size: 0.82rem;
+  font-weight: 700;
+  background: #2f8a46;
+  border-radius: 999px;
+  padding: 0.42rem 0.8rem 0.42rem 0.55rem;
+  white-space: nowrap;
+}
+
+.whatsapp:hover {
+  background: #26753a;
+}
+
+.whatsapp svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
 }
 
 .marca {
@@ -20,13 +46,13 @@
   gap: 0.7rem;
   color: #fff;
   font-weight: 800;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.03em;
   min-width: 0;
 }
 
 .marca img {
-  width: 48px;
-  height: 48px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   object-fit: cover;
   background: #fff;
@@ -35,66 +61,169 @@
 
 .menu {
   display: flex;
-  gap: 1.25rem;
   justify-content: center;
-  margin-top: 0.65rem;
+  gap: 0.2rem;
+  min-width: 0;
 }
 
 .menu a {
-  color: #e8eee3;
-  font-weight: 600;
+  color: #eef3ea;
+  font-weight: 700;
+  font-size: 0.95rem;
+  padding: 0.45rem 0.75rem;
+  border-radius: 999px;
   white-space: nowrap;
 }
 
 .menu a.ativo,
 .menu a:hover {
-  color: #e5a9b4;
+  color: #fff;
+  background: rgb(255 255 255 / 12%);
 }
 
 .acoes {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.65rem;
   flex-shrink: 0;
 }
 
-.acoes .botao.conta {
-  background: #e5a9b4;
+.cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--rosa);
   color: #2f432c;
-}
-
-.acoes .botao.sair,
-.acoes .botao.fantasma-claro {
-  background: transparent;
-  color: #fff;
-  border: 1px solid #c1c9b7;
-}
-
-.acoes .botao.sair:hover,
-.acoes .botao.fantasma-claro:hover {
-  border-color: #fff;
-}
-
-.whatsapp {
-  color: #fff;
-  font-size: 0.85rem;
-  border: 1px solid #c1c9b7;
-  padding: 0.4rem 0.7rem;
+  font-weight: 800;
   border-radius: 999px;
+  padding: 0.5rem 1.05rem;
+  min-height: 40px;
 }
 
-@media (max-width: 900px) {
-  .cabecalho {
-    padding: 0.7rem 1rem 0.8rem;
+.entrar {
+  color: #fff;
+  font-weight: 700;
+  padding: 0.4rem 0.65rem;
+}
+
+.conta {
+  position: relative;
+}
+
+.usuario {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgb(255 255 255 / 10%);
+  border: 1px solid rgb(255 255 255 / 22%);
+  color: #fff;
+  border-radius: 999px;
+  padding: 0.22rem 0.55rem 0.22rem 0.22rem;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+}
+
+.usuario:hover,
+.usuario.aberto {
+  background: rgb(255 255 255 / 16%);
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--rosa);
+  color: #2f432c;
+  display: grid;
+  place-items: center;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.usuario mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  transition: transform 0.2s ease;
+}
+
+.usuario.aberto mat-icon {
+  transform: rotate(180deg);
+}
+
+.dropdown {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.55rem);
+  min-width: 220px;
+  background: #fff;
+  color: var(--texto);
+  border-radius: 16px;
+  padding: 0.55rem;
+  box-shadow: 0 16px 40px rgb(28 43 31 / 18%);
+  z-index: 40;
+}
+
+.dropdown::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  right: 1.2rem;
+  width: 12px;
+  height: 12px;
+  background: #fff;
+  transform: rotate(45deg);
+}
+
+.saudacao {
+  margin: 0 0 0.35rem;
+  padding: 0.45rem 0.7rem 0.55rem;
+  font-size: 0.78rem;
+  color: #5b6f55;
+  border-bottom: 1px solid #edf1ea;
+}
+
+.dropdown a,
+.dropdown .sair {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: 0;
+  background: transparent;
+  color: var(--texto);
+  font: inherit;
+  font-weight: 700;
+  padding: 0.65rem 0.75rem;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.dropdown a:hover,
+.dropdown .sair:hover {
+  background: #f3f6f0;
+}
+
+.dropdown .sair {
+  color: #8a3a3a;
+  margin-top: 0.2rem;
+}
+
+@media (max-width: 980px) {
+  .faixa {
+    grid-template-columns: auto 1fr auto;
+    padding: 0.65rem 1rem 0.75rem;
   }
 
-  .marca span {
+  .marca span,
+  .whatsapp span,
+  .usuario .nome {
     display: none;
   }
 
   .menu {
+    grid-column: 1 / -1;
     justify-content: flex-start;
-    gap: 1rem;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
@@ -102,15 +231,5 @@
 
   .menu::-webkit-scrollbar {
     display: none;
-  }
-
-  .acoes .whatsapp {
-    display: none;
-  }
-
-  .acoes .botao {
-    padding: 0.5rem 0.9rem;
-    font-size: 0.88rem;
-    min-height: 40px;
   }
 }

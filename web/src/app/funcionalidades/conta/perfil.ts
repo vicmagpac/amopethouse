@@ -1,7 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -18,95 +17,14 @@ import { aplicarMascara, somenteDigitos } from '../../compartilhado/util/mascara
     ReactiveFormsModule,
     CamposEndereco,
     Mascara,
-    MatCardModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
     MatIcon,
     MatSnackBarModule,
   ],
-  template: `
-    <mat-card appearance="outlined" class="painel-conta">
-      <mat-card-header>
-        <mat-card-title>Meu perfil</mat-card-title>
-        <mat-card-subtitle>Dados para contato, endereço e emergência.</mat-card-subtitle>
-      </mat-card-header>
-      <mat-card-content>
-        @if (mensagem()) {
-          <p class="ok">{{ mensagem() }}</p>
-        }
-        @if (erros().length) {
-          <ul class="erros">@for (erro of erros(); track erro) { <li>{{ erro }}</li> }</ul>
-        }
-        <form class="conta-form grade" [formGroup]="formulario" (ngSubmit)="salvar()">
-          <mat-form-field appearance="outline">
-            <mat-label>Nome</mat-label>
-            <input matInput formControlName="nome" autocomplete="name" />
-          </mat-form-field>
-          <mat-form-field appearance="outline">
-            <mat-label>Telefone</mat-label>
-            <input
-              matInput
-              formControlName="telefone"
-              mascara="telefone"
-              placeholder="(85) 99999-9999"
-              inputmode="tel"
-              autocomplete="tel"
-              maxlength="15"
-            />
-          </mat-form-field>
-          <app-campos-endereco />
-          <mat-form-field appearance="outline">
-            <mat-label>Contato de emergência</mat-label>
-            <input matInput formControlName="contato_emergencia_nome" />
-          </mat-form-field>
-          <mat-form-field appearance="outline">
-            <mat-label>Telefone de emergência</mat-label>
-            <input
-              matInput
-              formControlName="contato_emergencia_telefone"
-              mascara="telefone"
-              placeholder="(85) 99999-9999"
-              inputmode="tel"
-              maxlength="15"
-            />
-          </mat-form-field>
-          <div class="acoes">
-            <button matButton="filled" type="submit" [disabled]="formulario.invalid || enviando()">
-              <mat-icon>save</mat-icon>
-              Salvar
-            </button>
-          </div>
-        </form>
-      </mat-card-content>
-    </mat-card>
-  `,
-  styles: `
-    .painel-conta {
-      max-width: 820px;
-    }
-    mat-card-title {
-      color: var(--verde);
-    }
-    .grade {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.25rem 1rem;
-      margin-top: 0.5rem;
-    }
-    app-campos-endereco {
-      grid-column: 1 / -1;
-    }
-    .acoes {
-      grid-column: 1 / -1;
-      margin-top: 0.5rem;
-    }
-    @media (max-width: 640px) {
-      .grade {
-        grid-template-columns: 1fr;
-      }
-    }
-  `,
+  templateUrl: './perfil.html',
+  styleUrl: './perfil.scss',
 })
 export class Perfil implements OnInit {
   private readonly fb = inject(FormBuilder);

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\V1\AdminReservaController;
 use App\Http\Controllers\Api\V1\AnimalController;
 use App\Http\Controllers\Api\V1\AutenticacaoController;
+use App\Http\Controllers\Api\V1\ConfiguracaoController;
 use App\Http\Controllers\Api\V1\DisponibilidadeController;
 use App\Http\Controllers\Api\V1\RegistroVacinaController;
 use App\Http\Controllers\Api\V1\ReservaController;
@@ -41,8 +42,11 @@ Route::middleware('auth:sanctum')->group(function (): void {
     Route::middleware('administrador')->prefix('admin')->group(function (): void {
         Route::get('/tipos-servico', [TipoServicoController::class, 'index']);
         Route::put('/tipos-servico/{tipoServico}', [TipoServicoController::class, 'atualizar']);
+        Route::get('/configuracao', [ConfiguracaoController::class, 'show']);
+        Route::put('/configuracao', [ConfiguracaoController::class, 'atualizar']);
         Route::get('/reservas', [AdminReservaController::class, 'index']);
         Route::get('/painel', [AdminReservaController::class, 'painel']);
+        Route::post('/reservas/{reserva}/confirmar', [AdminReservaController::class, 'confirmar']);
         Route::post('/reservas/{reserva}/iniciar', [AdminReservaController::class, 'iniciar']);
         Route::post('/reservas/{reserva}/concluir', [AdminReservaController::class, 'concluir']);
         Route::post('/reservas/{reserva}/pagamento', [AdminReservaController::class, 'pagamento']);

@@ -1,0 +1,31 @@
+<div class="topo">
+  <button matIconButton type="button" (click)="mudar(-1)" aria-label="Mês anterior">
+    <mat-icon>chevron_left</mat-icon>
+  </button>
+  <strong>{{ titulo() }}</strong>
+  <button matIconButton type="button" (click)="mudar(1)" aria-label="Próximo mês">
+    <mat-icon>chevron_right</mat-icon>
+  </button>
+</div>
+<div class="grade">
+  @for (rotulo of semanas; track rotulo) {
+    <span class="cabeca">{{ rotulo }}</span>
+  }
+  @for (celula of celulas(); track celula.chave) {
+    <button
+      type="button"
+      class="dia"
+      [class.fora]="celula.fora"
+      [class.disponivel]="celula.disponivel"
+      [class.indisponivel]="!celula.disponivel && !celula.fora"
+      [class.selecionado]="celula.selecionado"
+      [disabled]="celula.fora || !celula.disponivel"
+      (click)="escolher.emit(celula.data)"
+    >
+      <span>{{ celula.dia }}</span>
+      @if (celula.vagas != null && celula.disponivel) {
+        <small>{{ celula.vagas }}</small>
+      }
+    </button>
+  }
+</div>

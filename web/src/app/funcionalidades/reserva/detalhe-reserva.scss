@@ -1,0 +1,102 @@
+.voltar {
+  margin: -0.4rem 0 0.5rem -0.6rem;
+}
+
+h1 {
+  margin: 0 0 0.35rem;
+}
+
+.subtitulo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0 0 1.15rem;
+}
+
+.selo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  border-radius: 999px;
+  padding: 0.18rem 0.65rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.selo mat-icon {
+  font-size: 14px;
+  width: 14px;
+  height: 14px;
+}
+
+.selo.status {
+  background: rgb(74 103 65 / 10%);
+  color: var(--verde);
+}
+
+.selo.status[data-status='pendente_confirmacao'] {
+  background: #fff3d6;
+  color: #8a5a12;
+}
+
+.selo.status[data-status='em_andamento'] {
+  background: rgb(229 169 180 / 28%);
+  color: #6b3d48;
+}
+
+.selo.status[data-status='concluida'] {
+  background: #eef1ea;
+  color: #5b6f55;
+}
+
+.selo.status[data-status='cancelada'] {
+  background: #f6e8e8;
+  color: #8a3a3a;
+}
+
+.selo.pagamento {
+  background: #f6e8e8;
+  color: #8a3a3a;
+}
+
+.selo.pagamento.pago {
+  background: rgb(74 103 65 / 12%);
+  color: var(--verde);
+}
+
+.dados {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.9rem 1.25rem;
+  margin: 0 0 1.25rem;
+}
+
+.dados div {
+  margin: 0;
+}
+
+dt {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #5b6f55;
+  margin: 0 0 0.2rem;
+}
+
+dd {
+  margin: 0;
+  font-weight: 600;
+}
+
+.largo {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 640px) {
+  .dados {
+    grid-template-columns: 1fr;
+  }
+
+  .largo {
+    grid-column: 1;
+  }
+}

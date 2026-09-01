@@ -1,0 +1,35 @@
+.topo {
+  margin-bottom: 1.15rem;
+}
+
+h1 {
+  margin: 0 0 0.35rem;
+}
+
+.subtitulo {
+  margin: 0;
+  color: #5b6f55;
+  line-height: 1.45;
+}
+
+.grade {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.25rem 1rem;
+  margin-top: 0.5rem;
+}
+
+app-campos-endereco {
+  grid-column: 1 / -1;
+}
+
+.acoes {
+  grid-column: 1 / -1;
+  margin-top: 0.5rem;
+}
+
+@media (max-width: 640px) {
+  .grade {
+    grid-template-columns: 1fr;
+  }
+}

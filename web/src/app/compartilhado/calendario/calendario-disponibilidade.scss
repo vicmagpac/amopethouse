@@ -1,0 +1,67 @@
+.topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.6rem;
+}
+
+.topo strong {
+  text-transform: capitalize;
+  color: var(--verde);
+}
+
+.grade {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.35rem;
+}
+
+.cabeca {
+  text-align: center;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #5b6f55;
+  letter-spacing: 0.04em;
+}
+
+.dia {
+  min-height: 52px;
+  border: 1px solid #d5ddd0;
+  background: #fff;
+  border-radius: 12px;
+  cursor: pointer;
+  font: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.05rem;
+  color: var(--texto);
+}
+
+.dia small {
+  font-size: 0.68rem;
+  color: var(--verde);
+  font-weight: 700;
+}
+
+.dia.disponivel:hover {
+  border-color: var(--verde);
+}
+
+.dia.selecionado {
+  border-color: var(--verde);
+  box-shadow: 0 0 0 2px rgb(74 103 65 / 22%);
+  background: #eef4ea;
+}
+
+.dia.indisponivel,
+.dia:disabled {
+  opacity: 0.42;
+  cursor: not-allowed;
+  background: #f1f1ee;
+}
+
+.dia.fora {
+  visibility: hidden;
+}

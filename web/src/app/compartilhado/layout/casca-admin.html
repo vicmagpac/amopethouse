@@ -1,0 +1,61 @@
+<mat-sidenav-container class="admin">
+  <mat-sidenav #menu mode="side" [opened]="aberto()" class="barra">
+    <div class="marca">
+      <img src="/brand/logo.jpg" alt="Amo Pet House" />
+      <div>
+        <strong>Amo Pet House</strong>
+        <span>Painel da equipe</span>
+      </div>
+    </div>
+
+    <p class="grupo">Principal</p>
+    <mat-nav-list>
+      <a mat-list-item routerLink="/admin" routerLinkActive="ativo" [routerLinkActiveOptions]="{ exact: true }">
+        <mat-icon matListItemIcon>dashboard</mat-icon>
+        <span matListItemTitle>Dashboard</span>
+      </a>
+    </mat-nav-list>
+
+    <p class="grupo">Operação</p>
+    <mat-nav-list>
+      <a mat-list-item routerLink="/admin/reservas" routerLinkActive="ativo">
+        <mat-icon matListItemIcon>event_available</mat-icon>
+        <span matListItemTitle>Reservas</span>
+      </a>
+      <a mat-list-item routerLink="/admin/bloqueios" routerLinkActive="ativo">
+        <mat-icon matListItemIcon>event_busy</mat-icon>
+        <span matListItemTitle>Bloqueios</span>
+      </a>
+    </mat-nav-list>
+
+    <p class="grupo">Catálogo</p>
+    <mat-nav-list>
+      <a mat-list-item routerLink="/admin/servicos" routerLinkActive="ativo">
+        <mat-icon matListItemIcon>spa</mat-icon>
+        <span matListItemTitle>Serviços e preços</span>
+      </a>
+    </mat-nav-list>
+
+    <div class="rodape-menu">
+      <p>{{ autenticacao.usuario()?.nome }}</p>
+      <a routerLink="/">Ver o site</a>
+    </div>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <mat-toolbar class="topo">
+      <button matIconButton type="button" (click)="aberto.set(!aberto())" aria-label="Abrir menu">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span class="titulo">Administração</span>
+      <span class="espaco"></span>
+      <button matButton="text" type="button" (click)="autenticacao.sair().subscribe()">
+        <mat-icon>logout</mat-icon>
+        Sair
+      </button>
+    </mat-toolbar>
+    <div class="conteudo">
+      <router-outlet />
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

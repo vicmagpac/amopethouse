@@ -1,0 +1,52 @@
+h1 {
+  margin-bottom: 0.25rem;
+}
+
+.subtitulo {
+  color: #5b6f55;
+}
+
+.form-card {
+  margin: 1rem 0;
+}
+
+.grade {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0.75rem;
+  align-items: start;
+}
+
+.largo {
+  grid-column: 1 / -1;
+}
+
+.lista {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.lista li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid #edf1ea;
+}
+
+.lista span,
+.lista small {
+  display: block;
+  color: #5b6f55;
+}
+
+@media (max-width: 800px) {
+  .grade {
+    grid-template-columns: 1fr;
+  }
+
+  .largo {
+    grid-column: 1;
+  }
+}

@@ -1,0 +1,54 @@
+<div class="topo">
+  <h1>Meu perfil</h1>
+  <p class="subtitulo">Dados para contato, endereço e emergência.</p>
+</div>
+@if (mensagem()) {
+  <p class="ok">{{ mensagem() }}</p>
+}
+@if (erros().length) {
+  <ul class="erros">
+    @for (erro of erros(); track erro) {
+      <li>{{ erro }}</li>
+    }
+  </ul>
+}
+<form class="conta-form grade" [formGroup]="formulario" (ngSubmit)="salvar()">
+  <mat-form-field appearance="outline">
+    <mat-label>Nome</mat-label>
+    <input matInput formControlName="nome" autocomplete="name" />
+  </mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>Telefone</mat-label>
+    <input
+      matInput
+      formControlName="telefone"
+      mascara="telefone"
+      placeholder="(85) 99999-9999"
+      inputmode="tel"
+      autocomplete="tel"
+      maxlength="15"
+    />
+  </mat-form-field>
+  <app-campos-endereco />
+  <mat-form-field appearance="outline">
+    <mat-label>Contato de emergência</mat-label>
+    <input matInput formControlName="contato_emergencia_nome" />
+  </mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>Telefone de emergência</mat-label>
+    <input
+      matInput
+      formControlName="contato_emergencia_telefone"
+      mascara="telefone"
+      placeholder="(85) 99999-9999"
+      inputmode="tel"
+      maxlength="15"
+    />
+  </mat-form-field>
+  <div class="acoes">
+    <button matButton="filled" type="submit" [disabled]="formulario.invalid || enviando()">
+      <mat-icon>save</mat-icon>
+      Salvar
+    </button>
+  </div>
+</form>

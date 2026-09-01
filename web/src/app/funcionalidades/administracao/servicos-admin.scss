@@ -1,0 +1,46 @@
+h1 {
+  margin-bottom: 0.25rem;
+}
+
+.subtitulo {
+  color: #5b6f55;
+}
+
+.casa {
+  margin-bottom: 1.15rem;
+}
+
+.casa-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.casa-form mat-form-field {
+  max-width: 16rem;
+}
+
+.dica {
+  margin: -0.2rem 0 0.4rem;
+  font-size: 0.82rem;
+  color: #5b6f55;
+}
+
+.grade {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+}
+
+mat-slide-toggle {
+  margin: 0.35rem 0;
+}

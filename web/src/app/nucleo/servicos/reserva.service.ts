@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ambiente } from '../ambiente';
-import { BloqueioEquipe, DiaDisponivel, PainelAdmin, Reserva, TipoServico } from '../modelos';
+import { BloqueioEquipe, ConfiguracaoCasa, DiaDisponivel, PainelAdmin, Reserva, TipoServico } from '../modelos';
 
 @Injectable({ providedIn: 'root' })
 export class ReservaService {
@@ -54,6 +54,10 @@ export class ReservaService {
     return this.http.post<{ data: Reserva }>(`${this.api}/admin/reservas/${id}/iniciar`, {});
   }
 
+  confirmar(id: number) {
+    return this.http.post<{ data: Reserva }>(`${this.api}/admin/reservas/${id}/confirmar`, {});
+  }
+
   concluir(id: number) {
     return this.http.post<{ data: Reserva }>(`${this.api}/admin/reservas/${id}/concluir`, {});
   }
@@ -64,6 +68,14 @@ export class ReservaService {
 
   tiposAdmin() {
     return this.http.get<{ data: TipoServico[] }>(`${this.api}/admin/tipos-servico`);
+  }
+
+  configuracaoAdmin() {
+    return this.http.get<{ data: ConfiguracaoCasa }>(`${this.api}/admin/configuracao`);
+  }
+
+  atualizarConfiguracao(dados: ConfiguracaoCasa) {
+    return this.http.put<{ data: ConfiguracaoCasa }>(`${this.api}/admin/configuracao`, dados);
   }
 
   atualizarTipo(id: number, dados: Record<string, unknown>) {

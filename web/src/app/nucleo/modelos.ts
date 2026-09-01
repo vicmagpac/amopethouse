@@ -73,7 +73,7 @@ export interface PagamentoReserva {
 
 export interface Reserva {
   id: number;
-  status: 'confirmada' | 'em_andamento' | 'concluida' | 'cancelada';
+  status: 'pendente_confirmacao' | 'confirmada' | 'em_andamento' | 'concluida' | 'cancelada';
   status_rotulo: string;
   inicio: string;
   fim: string;
@@ -110,9 +110,15 @@ export interface BloqueioEquipe {
 
 export interface PainelAdmin {
   reservas_hoje: number;
+  animais_na_casa_hoje: number;
+  capacidade_casa: number;
   proximos_7_dias: number;
   a_receber: string | number;
   recebido_mes: string | number;
   por_servico: { id: number; nome: string; slug: string; quantidade: number; capacidade: number }[];
   agenda: Reserva[];
+}
+
+export interface ConfiguracaoCasa {
+  capacidade_casa: number;
 }

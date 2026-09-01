@@ -3,8 +3,10 @@
 namespace App\Services;
 
 use App\Enums\StatusReserva;
+use App\Enums\TipoServicoSlug;
 use App\Enums\TipoTurno;
 use App\Models\BloqueioEquipe;
+use App\Models\Configuracao;
 use App\Models\Reserva;
 use App\Models\TipoServico;
 use Carbon\Carbon;
@@ -97,9 +99,20 @@ class DisponibilidadeService
 
     public function vagasLivres(TipoServico $tipo, CarbonInterface $inicio, CarbonInterface $fim): int
     {
-        $ocupadas = $this->reservasSobrepostas($tipo, $inicio, $fim)->sum('animais_count');
+        $vagasServico = (int) $tipo->capacidade - $this->ocupacao($inicio, $fim, [(int) $tipo->id]);
 
-        return (int) $tipo->capacidade - (int) $ocupadas;
+        if (! $tipo->slug?->ocupaACasa()) {
+            return max(0, $vagasServico);
+        }
+
+        $vagasCasa = Configuracao::capacidadeCasa() - $this->ocupacaoCasa($inicio, $fim);
+
+        return max(0, min($vagasServico, $vagasCasa));
+    }
+
+    public function ocupacaoCasa(CarbonInterface $inicio, CarbonInterface $fim): int
+    {
+        return $this->ocupacao($inicio, $fim, $this->idsServicosNaCasa());
     }
 
     public function cabe(TipoServico $tipo, CarbonInterface $inicio, CarbonInterface $fim, int $quantidade): bool
@@ -137,17 +150,39 @@ class DisponibilidadeService
     }
 
     /**
+     * @param  list<int>  $tipoIds
+     */
+    private function ocupacao(CarbonInterface $inicio, CarbonInterface $fim, array $tipoIds): int
+    {
+        if ($tipoIds === []) {
+            return 0;
+        }
+
+        return (int) $this->reservasSobrepostas($inicio, $fim, $tipoIds)->sum('animais_count');
+    }
+
+    /**
+     * @return list<int>
+     */
+    private function idsServicosNaCasa(): array
+    {
+        return TipoServico::query()
+            ->whereIn('slug', TipoServicoSlug::servicosNaCasa())
+            ->pluck('id')
+            ->map(fn ($id) => (int) $id)
+            ->all();
+    }
+
+    /**
+     * @param  list<int>  $tipoIds
      * @return Collection<int, Reserva>
      */
-    private function reservasSobrepostas(TipoServico $tipo, CarbonInterface $inicio, CarbonInterface $fim): Collection
+    private function reservasSobrepostas(CarbonInterface $inicio, CarbonInterface $fim, array $tipoIds): Collection
     {
         return Reserva::query()
             ->withCount('animais')
-            ->where('tipo_servico_id', $tipo->id)
-            ->whereIn('status', [
-                StatusReserva::Confirmada->value,
-                StatusReserva::EmAndamento->value,
-            ])
+            ->whereIn('tipo_servico_id', $tipoIds)
+            ->whereIn('status', StatusReserva::queOcupamVaga())
             ->where('inicio', '<', $fim)
             ->where('fim', '>', $inicio)
             ->get();

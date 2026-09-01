@@ -1,11 +1,10 @@
-<mat-card appearance="outlined" class="painel-conta">
-  <mat-card-header>
-    <mat-card-title>{{ id() ? 'Editar animal' : 'Novo animal' }}</mat-card-title>
-    <mat-card-subtitle>
-      {{ id() ? 'Atualize os dados, a foto e as vacinas.' : 'Informe espécie, raça e temperamento do pet.' }}
-    </mat-card-subtitle>
-  </mat-card-header>
-  <mat-card-content>
+<div class="topo">
+  <h1>{{ id() ? 'Editar animal' : 'Novo animal' }}</h1>
+  <p class="subtitulo">
+    {{ id() ? 'Atualize os dados, a foto e as vacinas.' : 'Informe espécie, raça e temperamento do pet.' }}
+  </p>
+</div>
+
     @if (erros().length) {
       <ul class="erros">@for (erro of erros(); track erro) { <li>{{ erro }}</li> }</ul>
     }
@@ -57,7 +56,9 @@
 
       <mat-form-field appearance="outline">
         <mat-label>Nascimento</mat-label>
-        <input matInput type="date" formControlName="data_nascimento" />
+        <input matInput [matDatepicker]="nascimento" formControlName="data_nascimento" />
+        <mat-datepicker-toggle matIconSuffix [for]="nascimento" />
+        <mat-datepicker #nascimento />
       </mat-form-field>
 
       <mat-form-field appearance="outline">
@@ -103,16 +104,12 @@
         }
       </div>
     </form>
-  </mat-card-content>
-</mat-card>
 
 @if (id()) {
-  <mat-card appearance="outlined" class="painel-conta vacinas">
-    <mat-card-header>
-      <mat-card-title>Vacinas</mat-card-title>
-      <mat-card-subtitle>Mantenha a carteira em dia para a estadia.</mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content>
+  <section class="vacinas">
+    <h2>Vacinas</h2>
+    <p class="subtitulo">Mantenha a carteira em dia para a estadia.</p>
+
       @if (vacinas().length === 0) {
         <p class="vazio">Nenhuma vacina registrada ainda.</p>
       } @else {
@@ -154,11 +151,15 @@
         }
         <mat-form-field appearance="outline">
           <mat-label>Aplicada em</mat-label>
-          <input matInput type="date" formControlName="aplicada_em" />
+          <input matInput [matDatepicker]="aplicada" formControlName="aplicada_em" />
+          <mat-datepicker-toggle matIconSuffix [for]="aplicada" />
+          <mat-datepicker #aplicada />
         </mat-form-field>
         <mat-form-field appearance="outline">
           <mat-label>Validade</mat-label>
-          <input matInput type="date" formControlName="expira_em" />
+          <input matInput [matDatepicker]="validade" formControlName="expira_em" />
+          <mat-datepicker-toggle matIconSuffix [for]="validade" />
+          <mat-datepicker #validade />
         </mat-form-field>
         <div class="foto-campo largo">
           <label class="rotulo-foto" for="doc-vacina">Comprovante (foto ou PDF)</label>
@@ -171,6 +172,5 @@
           </button>
         </div>
       </form>
-    </mat-card-content>
-  </mat-card>
+  </section>
 }

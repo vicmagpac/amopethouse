@@ -1,0 +1,54 @@
+<div class="topo">
+  <div>
+    <h1>Minhas reservas</h1>
+    <p>Acompanhe os pedidos. A equipe confirma a reserva e o pagamento acontece no checkout presencial.</p>
+  </div>
+  <a matButton="filled" routerLink="/conta/reservas/nova">
+    <mat-icon>add</mat-icon>
+    Nova reserva
+  </a>
+</div>
+@if (erros().length) {
+  <ul class="erros">
+    @for (erro of erros(); track erro) {
+      <li>{{ erro }}</li>
+    }
+  </ul>
+}
+@if (!reservas().length) {
+  <div class="vazio">
+    <mat-icon>event</mat-icon>
+    <h2>Nenhuma reserva ainda</h2>
+    <p>Escolha um serviço e uma data livre para agendar o cuidado.</p>
+    <a matButton="filled" routerLink="/conta/reservas/nova">Agendar agora</a>
+  </div>
+} @else {
+  <div class="grade">
+    @for (reserva of reservas(); track reserva.id) {
+      <article class="cartao" [class.cancelada]="reserva.status === 'cancelada'">
+        <div class="selos">
+          <span class="selo status" [attr.data-status]="reserva.status">{{ reserva.status_rotulo }}</span>
+          <span class="selo pagamento" [class.pago]="estaPago(reserva)">
+            <mat-icon>{{ estaPago(reserva) ? 'check_circle' : 'payments' }}</mat-icon>
+            {{ rotuloDoPagamento(reserva) }}
+          </span>
+        </div>
+        <h2>{{ reserva.tipo_servico?.nome }}</h2>
+        <p class="quando">
+          <mat-icon>schedule</mat-icon>
+          {{ dataHora(reserva.inicio) }}
+        </p>
+        @if (nomes(reserva); as pets) {
+          <p class="pets">
+            <mat-icon>pets</mat-icon>
+            {{ pets }}
+          </p>
+        }
+        <div class="rodape">
+          <strong>{{ reais(reserva.valor_total) }}</strong>
+          <a matButton [routerLink]="['/conta/reservas', reserva.id]">Ver detalhes</a>
+        </div>
+      </article>
+    }
+  </div>
+}

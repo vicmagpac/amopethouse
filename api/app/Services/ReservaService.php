@@ -11,6 +11,7 @@ use App\Models\Reserva;
 use App\Models\TipoServico;
 use App\Models\Usuario;
 use App\Notifications\ReservaConfirmada;
+use App\Notifications\ReservaSolicitada;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -51,7 +52,7 @@ class ReservaService
             $reserva = Reserva::query()->create([
                 'usuario_id' => $usuario->id,
                 'tipo_servico_id' => $tipo->id,
-                'status' => StatusReserva::Confirmada,
+                'status' => StatusReserva::PendenteConfirmacao,
                 'inicio' => $inicio,
                 'fim' => $fim,
                 'valor_total' => $valor,
@@ -73,7 +74,7 @@ class ReservaService
             return $reserva->load(['tipoServico', 'animais', 'pagamento', 'usuario']);
         });
 
-        $usuario->notify(new ReservaConfirmada($reserva));
+        $usuario->notify(new ReservaSolicitada($reserva));
 
         return $reserva;
     }
@@ -86,7 +87,9 @@ class ReservaService
             ]);
         }
 
-        if (! $usuario->eAdministrador() && $reserva->inicio->lt(now()->addHours(48))) {
+        if (! $usuario->eAdministrador()
+            && $reserva->status !== StatusReserva::PendenteConfirmacao
+            && $reserva->inicio->lt(now()->addHours(48))) {
             throw ValidationException::withMessages([
                 'status' => 'O cancelamento gratuito só é permitido até 48 horas antes.',
             ]);
@@ -95,6 +98,17 @@ class ReservaService
         $reserva->update(['status' => StatusReserva::Cancelada]);
 
         return $reserva->fresh(['tipoServico', 'animais', 'pagamento', 'usuario']);
+    }
+
+    public function confirmar(Reserva $reserva): Reserva
+    {
+        $this->exigirStatus($reserva, StatusReserva::PendenteConfirmacao);
+        $reserva->update(['status' => StatusReserva::Confirmada]);
+        $reserva = $reserva->fresh(['tipoServico', 'animais', 'pagamento', 'usuario']);
+
+        $reserva->usuario?->notify(new ReservaConfirmada($reserva));
+
+        return $reserva;
     }
 
     public function iniciar(Reserva $reserva): Reserva

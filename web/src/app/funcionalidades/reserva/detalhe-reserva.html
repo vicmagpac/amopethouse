@@ -1,0 +1,73 @@
+<a matButton="text" class="voltar" routerLink="/conta/reservas">Voltar</a>
+@if (erros().length) {
+  <ul class="erros">
+    @for (erro of erros(); track erro) {
+      <li>{{ erro }}</li>
+    }
+  </ul>
+}
+@if (reserva(); as item) {
+  <h1>{{ item.tipo_servico?.nome }}</h1>
+  <p class="subtitulo">
+    <span class="selo status" [attr.data-status]="item.status">{{ item.status_rotulo }}</span>
+    <span class="selo pagamento" [class.pago]="estaPago(item)">
+      <mat-icon>{{ estaPago(item) ? 'check_circle' : 'payments' }}</mat-icon>
+      {{ rotuloDoPagamento(item) }}
+    </span>
+  </p>
+  <dl class="dados">
+    <div>
+      <dt>Início</dt>
+      <dd>{{ dataHora(item.inicio) }}</dd>
+    </div>
+    <div>
+      <dt>Fim</dt>
+      <dd>{{ dataHora(item.fim) }}</dd>
+    </div>
+    @if (item.turno_rotulo) {
+      <div>
+        <dt>Turno</dt>
+        <dd>{{ item.turno_rotulo }}</dd>
+      </div>
+    }
+    @if (item.endereco) {
+      <div>
+        <dt>Endereço</dt>
+        <dd>{{ item.endereco }}</dd>
+      </div>
+    }
+    @if (item.origem) {
+      <div>
+        <dt>Trecho</dt>
+        <dd>{{ item.origem }} → {{ item.destino }}</dd>
+      </div>
+    }
+    @if (item.local_compromisso) {
+      <div>
+        <dt>Local</dt>
+        <dd>{{ item.local_compromisso }}</dd>
+      </div>
+    }
+    <div>
+      <dt>Pets</dt>
+      <dd>{{ nomes(item) }}</dd>
+    </div>
+    <div>
+      <dt>Valor</dt>
+      <dd>{{ reais(item.valor_total) }}</dd>
+    </div>
+    <div>
+      <dt>Pagamento</dt>
+      <dd>{{ rotuloDoPagamento(item) }} · checkout presencial</dd>
+    </div>
+    @if (item.observacoes) {
+      <div class="largo">
+        <dt>Observações</dt>
+        <dd>{{ item.observacoes }}</dd>
+      </div>
+    }
+  </dl>
+  @if (item.status === 'pendente_confirmacao' || item.status === 'confirmada') {
+    <button matButton="outlined" type="button" (click)="cancelar(item)">Cancelar reserva</button>
+  }
+}

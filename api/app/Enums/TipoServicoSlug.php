@@ -25,4 +25,17 @@ enum TipoServicoSlug: string
     {
         return ! $this->ePorNoite() && ! $this->ePorTurno();
     }
+
+    public function ocupaACasa(): bool
+    {
+        return in_array($this, self::servicosNaCasa(), true);
+    }
+
+    /**
+     * @return list<self>
+     */
+    public static function servicosNaCasa(): array
+    {
+        return [self::Hospedagem, self::Creche];
+    }
 }

@@ -1,0 +1,115 @@
+<h1>Agendar cuidado</h1>
+<p class="subtitulo">Escolha o serviço, a data e os pets. A equipe confirma o pedido em seguida. O valor é cobrado no checkout presencial.</p>
+@if (erros().length) {
+  <ul class="erros">
+    @for (erro of erros(); track erro) {
+      <li>{{ erro }}</li>
+    }
+  </ul>
+}
+
+<div class="servicos">
+  @for (tipo of tipos(); track tipo.id) {
+    <button type="button" class="tipo" [class.ativo]="tipo.id === tipoId()" (click)="escolherTipo(tipo)">
+      <strong>{{ tipo.nome }}</strong>
+      <span>{{ reais(tipo.preco) }}</span>
+      <small>{{ tipo.descricao }}</small>
+    </button>
+  }
+</div>
+
+@if (tipoSelecionado(); as tipo) {
+  <form class="conta-form grade" [formGroup]="formulario" (ngSubmit)="enviar()">
+    <mat-form-field appearance="outline">
+      <mat-label>{{ tipo.slug === 'hospedagem' ? 'Entrada' : 'Data' }}</mat-label>
+      <input
+        matInput
+        [matDatepicker]="entrada"
+        formControlName="data_inicio"
+        (dateChange)="pedirDisponibilidade()"
+      />
+      <mat-datepicker-toggle matIconSuffix [for]="entrada" />
+      <mat-datepicker #entrada />
+    </mat-form-field>
+
+    @if (tipo.slug === 'hospedagem') {
+      <mat-form-field appearance="outline">
+        <mat-label>Saída</mat-label>
+        <input matInput [matDatepicker]="saida" formControlName="data_fim" />
+        <mat-datepicker-toggle matIconSuffix [for]="saida" />
+        <mat-datepicker #saida />
+      </mat-form-field>
+    }
+
+    @if (tipo.slug === 'creche') {
+      <mat-form-field appearance="outline">
+        <mat-label>Turno</mat-label>
+        <mat-select formControlName="turno">
+          @for (turno of turnosDoDia(); track turno.turno) {
+            <mat-option [value]="turno.turno" [disabled]="!turno.disponivel">
+              {{ turno.rotulo }} · {{ turno.vagas }} vagas
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    }
+
+    @if (porHorario()) {
+      <mat-form-field appearance="outline">
+        <mat-label>Horário</mat-label>
+        <mat-select formControlName="horario">
+          @for (hora of horariosDoDia(); track hora) {
+            <mat-option [value]="hora">{{ hora }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    }
+
+    @if (tipo.slug === 'cuidador') {
+      <mat-form-field appearance="outline" class="largo">
+        <mat-label>Endereço da visita</mat-label>
+        <input matInput formControlName="endereco" />
+      </mat-form-field>
+    }
+    @if (tipo.slug === 'transporte') {
+      <mat-form-field appearance="outline">
+        <mat-label>Origem</mat-label>
+        <input matInput formControlName="origem" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Destino</mat-label>
+        <input matInput formControlName="destino" />
+      </mat-form-field>
+    }
+    @if (tipo.slug === 'acompanhamento') {
+      <mat-form-field appearance="outline" class="largo">
+        <mat-label>Local do compromisso</mat-label>
+        <input matInput formControlName="local_compromisso" />
+      </mat-form-field>
+    }
+
+    <div class="pets largo">
+      <p>Quais pets vão?</p>
+      @for (animal of animais(); track animal.id) {
+        <mat-checkbox [checked]="selecionados().includes(animal.id)" (change)="alternarPet(animal.id)">
+          {{ animal.nome }} · {{ animal.especie_rotulo }}
+        </mat-checkbox>
+      }
+      @if (!animais().length) {
+        <p>Cadastre um animal antes de agendar. <a routerLink="/conta/animais/novo">Adicionar pet</a></p>
+      }
+    </div>
+
+    <mat-form-field appearance="outline" class="largo">
+      <mat-label>Observações</mat-label>
+      <textarea matInput rows="3" formControlName="observacoes"></textarea>
+    </mat-form-field>
+
+    <div class="acoes largo">
+      <button matButton="filled" type="submit" [disabled]="enviando() || !selecionados().length">
+        Enviar pedido
+      </button>
+      <a matButton="outlined" routerLink="/conta/reservas">Cancelar</a>
+    </div>
+  </form>
+}
