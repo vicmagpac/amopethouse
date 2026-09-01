@@ -86,6 +86,29 @@ export const TEMPERAMENTOS: string[] = [
   'Reativo com pessoas',
 ];
 
+export const VACINAS_CAO: string[] = [
+  'Antirrábica',
+  'V8 (óctupla)',
+  'V10 (décupla)',
+  'Gripe canina (tosse dos canis)',
+  'Giárdia',
+  'Leishmaniose',
+  'Outra',
+];
+
+export const VACINAS_GATO: string[] = [
+  'Antirrábica',
+  'V3 (tríplice felina)',
+  'V4 (quádrupla felina)',
+  'V5 (quíntupla / FeLV)',
+  'Leucemia felina (FeLV)',
+  'Outra',
+];
+
 export function racasPorEspecie(especie: string): string[] {
   return especie === 'gato' ? RACAS_GATO : RACAS_CAO;
+}
+
+export function vacinasPorEspecie(especie: string): string[] {
+  return especie === 'gato' ? VACINAS_GATO : VACINAS_CAO;
 }

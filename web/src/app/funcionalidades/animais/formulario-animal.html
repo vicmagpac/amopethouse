@@ -122,8 +122,11 @@
               <mat-icon matListItemIcon>vaccines</mat-icon>
               <span matListItemTitle>{{ vacina.nome }}</span>
               <span matListItemLine>
-                Aplicada em {{ vacina.aplicada_em }}
-                @if (vacina.expira_em) { · válida até {{ vacina.expira_em }} }
+                Aplicada em {{ soData(vacina.aplicada_em) }}
+                @if (vacina.expira_em) { · válida até {{ soData(vacina.expira_em) }} }
+                @if (vacina.documento_url) {
+                  · <a [href]="vacina.documento_url" target="_blank" rel="noopener">comprovante</a>
+                }
               </span>
               <button matIconButton matListItemMeta type="button" (click)="excluirVacina(vacina)" aria-label="Remover vacina">
                 <mat-icon>close</mat-icon>
@@ -136,8 +139,19 @@
       <form class="conta-form grade vacina-form" [formGroup]="vacinaForm" (ngSubmit)="adicionarVacina()">
         <mat-form-field appearance="outline">
           <mat-label>Vacina</mat-label>
-          <input matInput formControlName="nome" placeholder="Antirrábica" />
+          <mat-select formControlName="nome">
+            <mat-option value="">Selecione</mat-option>
+            @for (nome of nomesVacina(); track nome) {
+              <mat-option [value]="nome">{{ nome }}</mat-option>
+            }
+          </mat-select>
         </mat-form-field>
+        @if (vacinaPersonalizada()) {
+          <mat-form-field appearance="outline">
+            <mat-label>Nome da vacina</mat-label>
+            <input matInput formControlName="nome_outra" />
+          </mat-form-field>
+        }
         <mat-form-field appearance="outline">
           <mat-label>Aplicada em</mat-label>
           <input matInput type="date" formControlName="aplicada_em" />
@@ -146,6 +160,10 @@
           <mat-label>Validade</mat-label>
           <input matInput type="date" formControlName="expira_em" />
         </mat-form-field>
+        <div class="foto-campo largo">
+          <label class="rotulo-foto" for="doc-vacina">Comprovante (foto ou PDF)</label>
+          <input id="doc-vacina" type="file" accept="image/*,.pdf" (change)="aoSelecionarDocumento($event)" />
+        </div>
         <div class="acoes">
           <button matButton="filled" type="submit" [disabled]="vacinaForm.invalid">
             <mat-icon>add</mat-icon>

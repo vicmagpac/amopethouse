@@ -32,6 +32,10 @@ import { Rodape } from './rodape';
           </div>
         </div>
         <mat-nav-list>
+          <a mat-list-item routerLink="/conta/reservas" routerLinkActive="ativo">
+            <mat-icon matListItemIcon>event</mat-icon>
+            <span matListItemTitle>Minhas reservas</span>
+          </a>
           <a mat-list-item routerLink="/conta/animais" routerLinkActive="ativo">
             <mat-icon matListItemIcon>pets</mat-icon>
             <span matListItemTitle>Meus animais</span>

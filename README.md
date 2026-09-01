@@ -16,23 +16,24 @@ Na raiz do projeto:
 docker compose up --build
 ```
 
-Em outro terminal, na primeira vez:
+Na primeira vez:
 
 ```bash
-docker compose exec api php artisan migrate
+docker compose exec api php artisan migrate --seed
 docker compose exec api php artisan storage:link
 ```
 
-- Site: http://localhost:4200
-- API: http://localhost:8000
-- E-mails locais: http://localhost:8025
+- Site: http://localhost:4201
+- API: http://localhost:8001
+- E-mails locais: http://localhost:8026
 
 ## Contas
 
-Crie um tutor em `/cadastrar`. Depois cadastre os animais em `/conta/animais`.
+- Tutor: crie em `/cadastrar`, cadastre os pets em `/conta/animais` e agende em `/conta/reservas/nova`.
+- Equipe: `admin@amopethouse.com.br` / `AdminAmo@2026` → painel em `/admin`.
 
-O pagamento online (Mercado Pago) não faz parte deste recorte: a reserva futura será confirmada no site e o valor cobrado no checkout presencial.
+O pagamento online (Mercado Pago) não faz parte deste recorte: a reserva é confirmada no site e o valor é cobrado no checkout presencial. A equipe marca “Recebido” no painel.
 
 ## Nomenclatura
 
-O domínio está em português: `usuarios`, `animais`, `registros_vacinas`, rotas `/entrar`, `/cadastrar`, `/animais`.
+O domínio está em português: `usuarios`, `animais`, `reservas`, `tipos_servico`, rotas `/entrar`, `/cadastrar`, `/conta/reservas`, `/admin`.

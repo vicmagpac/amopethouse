@@ -5,7 +5,7 @@
   <p class="proposta">Cuidado, segurança e afeto para o seu pet. Tranquilidade para você.</p>
   <p class="apoio">Apoio de confiança para a sua rotina com o seu pet.</p>
   <div class="ctas">
-    <a class="botao principal" routerLink="/cadastrar">Agendar cuidado</a>
+    <a class="botao principal" routerLink="/conta/reservas/nova">Agendar cuidado</a>
     <a class="botao fantasma" [href]="whatsapp" target="_blank" rel="noopener">WhatsApp {{ whatsappRotulo }}</a>
   </div>
 </section>
@@ -35,9 +35,9 @@
         <p>{{ item.texto }}</p>
       </article>
     }
-  </div>
-  <a class="botao rosa" routerLink="/servicos">Ver detalhes dos serviços</a>
-</section>
+    </div>
+    <a class="botao rosa" routerLink="/servicos">Ver detalhes dos serviços</a>
+  </section>
 
 <section class="bloco">
   <p class="selo-eco">Eco friendly</p>

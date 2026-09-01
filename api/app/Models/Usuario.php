@@ -77,6 +77,11 @@ class Usuario extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Animal::class);
     }
 
+    public function reservas(): HasMany
+    {
+        return $this->hasMany(Reserva::class);
+    }
+
     public function eAdministrador(): bool
     {
         return $this->papel === PapelUsuario::Administrador;

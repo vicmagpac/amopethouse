@@ -7,7 +7,12 @@
 
     <div class="acoes">
       @if (autenticacao.autenticado()) {
-        <a class="botao conta" routerLink="/conta">Minha conta</a>
+        @if (autenticacao.usuario()?.papel === 'administrador') {
+          <a class="botao conta" routerLink="/admin">Painel</a>
+        } @else {
+          <a class="botao conta" routerLink="/conta/reservas/nova">Agendar</a>
+          <a class="botao sair" routerLink="/conta">Minha conta</a>
+        }
         <button type="button" class="botao sair" (click)="autenticacao.sair().subscribe()">Sair</button>
       } @else {
         <a class="botao fantasma-claro" routerLink="/entrar">Entrar</a>
@@ -24,7 +29,11 @@
     <a routerLink="/regras" routerLinkActive="ativo">Regras</a>
     <a routerLink="/contato" routerLinkActive="ativo">Contato</a>
     @if (autenticacao.autenticado()) {
-      <a routerLink="/conta" routerLinkActive="ativo">Minha conta</a>
+      @if (autenticacao.usuario()?.papel === 'administrador') {
+        <a routerLink="/admin" routerLinkActive="ativo">Painel</a>
+      } @else {
+        <a routerLink="/conta" routerLinkActive="ativo">Minha conta</a>
+      }
     }
   </nav>
 </header>

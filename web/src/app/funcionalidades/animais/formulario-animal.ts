@@ -12,8 +12,9 @@ import { MatListModule } from '@angular/material/list';
 import { MatSelectModule } from '@angular/material/select';
 import { AnimalService } from '../../nucleo/servicos/animal.service';
 import { Animal, RegistroVacina } from '../../nucleo/modelos';
-import { racasPorEspecie, TEMPERAMENTOS } from '../../nucleo/listas-animal';
+import { racasPorEspecie, TEMPERAMENTOS, vacinasPorEspecie } from '../../nucleo/listas-animal';
 import { mensagensErro } from '../../compartilhado/util/mensagens-erro';
+import { soData } from '../../compartilhado/util/formatacao';
 
 @Component({
   selector: 'app-formulario-animal',
@@ -60,7 +61,9 @@ export class FormularioAnimal implements OnInit {
   protected readonly animal = signal<Animal | null>(null);
   protected readonly vacinas = signal<RegistroVacina[]>([]);
   protected foto?: File;
+  protected documentoVacina?: File;
   protected readonly temperamentos = TEMPERAMENTOS;
+  protected readonly soData = soData;
   private readonly especieAtual = signal<'cao' | 'gato'>('cao');
   private readonly racaExtra = signal('');
 
@@ -86,8 +89,12 @@ export class FormularioAnimal implements OnInit {
     return lista;
   });
 
+  protected readonly nomesVacina = computed(() => vacinasPorEspecie(this.especieAtual()));
+  protected readonly vacinaPersonalizada = signal(false);
+
   protected readonly vacinaForm = this.fb.nonNullable.group({
     nome: ['', Validators.required],
+    nome_outra: [''],
     aplicada_em: ['', Validators.required],
     expira_em: [''],
   });
@@ -100,6 +107,21 @@ export class FormularioAnimal implements OnInit {
         this.formulario.controls.raca.setValue('');
         this.racaExtra.set('');
       }
+      if (!vacinasPorEspecie(especie).includes(this.vacinaForm.controls.nome.value)) {
+        this.vacinaForm.controls.nome.setValue('');
+      }
+    });
+    this.vacinaForm.controls.nome.valueChanges.pipe(takeUntilDestroyed()).subscribe((nome) => {
+      const outra = nome === 'Outra';
+      this.vacinaPersonalizada.set(outra);
+      const campo = this.vacinaForm.controls.nome_outra;
+      if (outra) {
+        campo.setValidators([Validators.required]);
+      } else {
+        campo.clearValidators();
+        campo.setValue('');
+      }
+      campo.updateValueAndValidity({ emitEvent: false });
     });
   }
 
@@ -139,6 +161,11 @@ export class FormularioAnimal implements OnInit {
   aoSelecionarFoto(evento: Event) {
     const input = evento.target as HTMLInputElement;
     this.foto = input.files?.[0];
+  }
+
+  aoSelecionarDocumento(evento: Event) {
+    const input = evento.target as HTMLInputElement;
+    this.documentoVacina = input.files?.[0];
   }
 
   salvar() {
@@ -194,15 +221,29 @@ export class FormularioAnimal implements OnInit {
     }
     const corpo = new FormData();
     const dados = this.vacinaForm.getRawValue();
-    corpo.append('nome', dados.nome);
+    const nome = dados.nome === 'Outra' ? dados.nome_outra.trim() : dados.nome;
+    if (!nome) {
+      this.erros.set(['Informe o nome da vacina.']);
+      return;
+    }
+    corpo.append('nome', nome);
     corpo.append('aplicada_em', dados.aplicada_em);
     if (dados.expira_em) {
       corpo.append('expira_em', dados.expira_em);
     }
+    if (this.documentoVacina) {
+      corpo.append('documento', this.documentoVacina);
+    }
     this.animaisApi.adicionarVacina(id, corpo).subscribe({
       next: (resposta) => {
         this.vacinas.update((lista) => [...lista, resposta.data]);
-        this.vacinaForm.reset();
+        this.vacinaForm.reset({
+          nome: '',
+          nome_outra: '',
+          aplicada_em: '',
+          expira_em: '',
+        });
+        this.documentoVacina = undefined;
       },
       error: (erro) => this.erros.set(mensagensErro(erro)),
     });

@@ -92,7 +92,10 @@ export class Entrar {
     this.enviando.set(true);
     const { email, senha } = this.formulario.getRawValue();
     this.autenticacao.entrar(email, senha).subscribe({
-      next: () => void this.router.navigate(['/conta/animais']),
+      next: (resposta) => {
+        const destino = resposta.data.papel === 'administrador' ? '/admin' : '/conta/reservas';
+        void this.router.navigate([destino]);
+      },
       error: (erro) => {
         this.erros.set(mensagensErro(erro));
         this.enviando.set(false);

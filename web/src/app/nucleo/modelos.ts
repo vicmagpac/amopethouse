@@ -48,3 +48,71 @@ export interface RespostaAutenticacao {
   data: Usuario;
   token: string;
 }
+
+export interface TipoServico {
+  id: number;
+  nome: string;
+  slug: 'hospedagem' | 'creche' | 'cuidador' | 'passeio' | 'transporte' | 'acompanhamento';
+  descricao: string | null;
+  preco: string | number;
+  preco_turno_longo: string | number | null;
+  duracao_minutos: number;
+  capacidade: number;
+  exige_vacina: boolean;
+  ativo: boolean;
+}
+
+export interface PagamentoReserva {
+  status: 'a_receber' | 'recebido';
+  status_rotulo: string;
+  meio: string;
+  meio_rotulo: string;
+  valor: string | number;
+  recebido_em: string | null;
+}
+
+export interface Reserva {
+  id: number;
+  status: 'confirmada' | 'em_andamento' | 'concluida' | 'cancelada';
+  status_rotulo: string;
+  inicio: string;
+  fim: string;
+  valor_total: string | number;
+  turno: 'quatro_horas' | 'oito_horas' | null;
+  turno_rotulo: string | null;
+  endereco: string | null;
+  origem: string | null;
+  destino: string | null;
+  local_compromisso: string | null;
+  observacoes: string | null;
+  tipo_servico?: TipoServico;
+  animais?: Animal[];
+  tutor?: Usuario;
+  pagamento?: PagamentoReserva | null;
+}
+
+export interface DiaDisponivel {
+  data: string;
+  disponivel: boolean;
+  vagas?: number;
+  horarios?: string[];
+  turnos?: { turno: string; rotulo: string; vagas: number; disponivel: boolean }[];
+}
+
+export interface BloqueioEquipe {
+  id: number;
+  tipo_servico_id: number | null;
+  tipo_servico_nome?: string | null;
+  inicio: string;
+  fim: string;
+  motivo: string | null;
+}
+
+export interface PainelAdmin {
+  reservas_hoje: number;
+  proximos_7_dias: number;
+  a_receber: string | number;
+  recebido_mes: string | number;
+  por_servico: { id: number; nome: string; slug: string; quantidade: number; capacidade: number }[];
+  agenda: Reserva[];
+}
